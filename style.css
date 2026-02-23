@@ -1,0 +1,558 @@
+/* 
+ * STYLE.CSS - SİTE TASARIMI
+ * 
+ * Bu dosya sitenin nasıl görüneceğini belirler.
+ * Renkler, boşluklar, yazı tipleri ve animasyonlar burada tanımlanır.
+ */
+
+:root {
+    /* --- RENK PALETİ (Değişkenler) --- */
+    /* Bu değişkenleri değiştirerek tüm sitenin rengini tek yerden değiştirebilirsiniz */
+    --primary: #0077b6;
+    /* Ana Mavi */
+    --primary-light: #48cae4;
+    /* Açık Mavi */
+    --secondary: #00b4d8;
+    /* Ara Ton */
+    --accent: #90e0ef;
+    /* Vurgu Rengi */
+    --dark: #023e8a;
+
+    /* --- TABLO STİLLERİ (Yapay Zeka Çıktısı İçin) --- */
+    /* Rapor sonuçları tablo olarak gelirse Excel gibi güzel gözüksün */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        /* Çizgileri birleştir */
+        margin: 1rem 0;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        background: white;
+    }
+
+    th,
+    td {
+        padding: 12px 15px;
+        border: 1px solid #e0e0e0;
+        text-align: left;
+    }
+
+    th {
+        background-color: var(--primary);
+        /* Başlık mavi olsun */
+        color: white;
+        font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f8f9fa;
+        /* Satırları zebra gibi boya */
+    }
+
+    tr:hover {
+        background-color: #e3f2fd;
+        /* Üzerine gelince parlasın */
+    }
+
+    /* Koyu Lacivert (Başlıklar için) */
+    --text: #1d3557;
+    /* Metin Rengi (Okunabilir koyu mavi) */
+    --text-light: #6c757d;
+    /* Gri Açıklama Metinleri */
+    --background: #f8f9fa;
+    /* Arka Plan Rengi (Kırık Beyaz) */
+    --white: #ffffff;
+    --success: #2a9d8f;
+    /* Başarılı/Yeşil */
+    --warning: #e9c46a;
+    /* Uyarı/Sarı */
+    --danger: #e76f51;
+    /* Hata/Kırmızı */
+
+    /* --- BOŞLUKLAR --- */
+    --space-sm: 0.5rem;
+    /* 8px */
+    --space-md: 1rem;
+    /* 16px */
+    --space-lg: 2rem;
+    /* 32px */
+    --space-xl: 4rem;
+    /* 64px */
+
+    /* --- EFEKTLER --- */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Hafif Gölge */
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Orta Gölge */
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    /* Derin Gölge */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    /* Cam Efekti */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+    --backdrop-blur: 10px;
+    /* Arkadaki bulanıklık */
+
+    /* --- YUVARLAKLIK --- */
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+    /* Tam yuvarlak butonlar için */
+
+    /* --- ANİMASYON --- */
+    --transition-speed: 0.3s;
+}
+
+/* Tüm elemanlar için temel ayar: Kenarlıklar boyuta dahil olsun */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Sayfa Gövdesi */
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+}
+
+/* Başlıklar (H1 - H6) */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Outfit', sans-serif;
+    /* Başlık fontu farklı */
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--space-md);
+    color: var(--dark);
+}
+
+/* Linkler */
+a {
+    text-decoration: none;
+    /* Alt çizgiyi kaldır */
+    color: inherit;
+    transition: color var(--transition-speed);
+    /* Renk değişimini yumuşat */
+}
+
+ul {
+    list-style: none;
+    /* Madde işaretlerini kaldır */
+}
+
+/* Görseller */
+img {
+    max-width: 100%;
+    /* Resimler taşmasın */
+    display: block;
+}
+
+/* --- YARDIMCI SINIFLAR (Utility) --- */
+.container {
+    max-width: 1200px;
+    /* İçerik genişliği sınırı */
+    margin: 0 auto;
+    /* Ortala */
+    padding: 0 var(--space-lg);
+}
+
+/* Buton Tasarımları */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all var(--transition-speed);
+    text-align: center;
+}
+
+/* Mavi Dolgulu Buton */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+}
+
+/* Üzerine gelince */
+.btn-primary:hover {
+    transform: translateY(-2px);
+    /* Hafif yukarı kalkar */
+    box-shadow: 0 6px 20px rgba(0, 119, 182, 0.4);
+}
+
+/* Çerçeveli Buton */
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+/* --- HEADER & NAVBAR (Üst Menü) --- */
+header {
+    background: rgba(240, 249, 255, 0.9);
+    /* Hafif mavimsi beyaz (Premium his) */
+    backdrop-filter: blur(var(--backdrop-blur));
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    /* Çok daha yumuşak gölge */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid rgba(0, 119, 182, 0.1);
+    /* İnce mavi çizgi */
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    /* İki uca yasla */
+    align-items: center;
+    /* Dikey ortala */
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo span {
+    color: var(--dark);
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--space-lg);
+    /* Linkler arası boşluk */
+    align-items: center;
+    /* Dikey ortalama */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    font-weight: 500;
+    color: var(--text);
+    position: relative;
+}
+
+/* Linkin altındaki kayan çizgi efekti */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: var(--primary);
+    transition: width var(--transition-speed);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+    /* Üzerine gelince veya aktifse çizgi uzar */
+}
+
+/* Mobil Menü Butonu (Varsayılan olarak gizli) */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text);
+}
+
+/* --- HERO BÖLÜMÜ (Karşılama Ekranı) --- */
+.hero {
+    padding: var(--space-xl) 0;
+    text-align: center;
+    /* Koyu mavi gradyan arka plan */
+    background: linear-gradient(135deg, rgba(0, 119, 182, 0.15) 0%, rgba(2, 62, 138, 0.1) 100%),
+        radial-gradient(circle at top left, rgba(72, 202, 228, 0.2), transparent 50%);
+    min-height: 80vh;
+    /* Ekranın %80'ini kapla */
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: var(--space-lg);
+    background: linear-gradient(135deg, var(--dark), var(--primary));
+    /* Yazıya renk geçişi */
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* Standart özellik eklendi */
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* Fallback */
+}
+
+.hero p {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    margin-bottom: var(--space-lg);
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+}
+
+/* --- KART TASARIMLARI (Özellikler & Blog) --- */
+.features {
+    padding: var(--space-xl) 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.section-title h2 {
+    font-size: 2.5rem;
+}
+
+/* --- GENEL IZGARA (Global Grid) --- */
+.grid {
+    display: flex;
+    flex-wrap: nowrap;
+    /* Aşağı kaymayı kesinlikle engeller */
+    gap: var(--space-lg);
+}
+
+.card {
+    flex: 1;
+    /* Tüm kartlar eşit genişlikte olur */
+    /* Diğer mevcut kodlarınız... */
+}
+
+/* --- ROBOTİK İKON (Hero Section) --- */
+.hero-image {
+    font-size: 12rem;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 10px 20px rgba(0, 119, 182, 0.2));
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* --- BÖLÜM AYRIMLARI (Zebra Efekti) --- */
+/* Arka plan renklerini değiştirerek bölümleri ayırıyoruz */
+section:nth-child(even) {
+    background-color: var(--white);
+}
+
+section:nth-child(odd) {
+    background-color: #f0f4f8;
+    /* Çok açık mavi-gri */
+}
+
+/* --- 3 KATMANLI YAPAY ZEKA KISMI (Eski Haline Döndü) --- */
+/* User'ın sevdiği flex yapıya geri dönüyoruz */
+#features .grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--space-lg);
+}
+
+#features .card {
+    flex: 1;
+    background: var(--white);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-speed);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+#features .card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* --- NASIL KULLANILIR (Pankart Stili) --- */
+#nasil-calisir .step-card {
+    flex: 1;
+    min-width: 280px;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease;
+}
+
+#nasil-calisir .step-card:hover {
+    transform: scale(1.02);
+}
+
+/* Pankart Renkleri */
+#nasil-calisir .step-card:nth-child(1) {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+#nasil-calisir .step-card:nth-child(2) {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+#nasil-calisir .step-card:nth-child(3) {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+#nasil-calisir h4 {
+    color: var(--white);
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+#nasil-calisir p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#nasil-calisir .step-num {
+    font-size: 4rem;
+    font-weight: 800;
+    opacity: 0.3;
+    position: absolute;
+    top: -10px;
+    right: 10px;
+}
+
+/* --- BOTTOM FEATURES (Neden MediClear - Yeniden Düzenlendi) --- */
+.why-section {
+    padding: var(--space-xl) 0;
+}
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+}
+
+.why-card {
+    background: var(--white);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    border-left: 5px solid var(--primary);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.why-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateX(5px);
+}
+
+.why-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    min-width: 50px;
+}
+
+/* --- FOOTER (Alt Bilgi) --- */
+footer {
+    background: var(--dark);
+    color: var(--white);
+    padding: var(--space-xl) 0 var(--space-lg);
+    margin-top: auto;
+    /* Sayfanın en altına itmek için */
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+
+.footer-brand h3 {
+    color: var(--white);
+    margin-bottom: var(--space-sm);
+}
+
+.footer-links a,
+.footer-legal a {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-links a:hover {
+    color: var(--white);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+/* --- MOBİL UYUMLULUK --- */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        /* Mobilde menüyü gizle (JS açacak) */
+    }
+
+    .mobile-menu-btn {
+        display: block;
+        /* Hamburger butonunu göster */
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        /* Başlığı küçült */
+    }
+}

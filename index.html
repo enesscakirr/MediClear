@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediClear - Tıbbi Rapor Çevirmeni</title>
+    <!-- Font Kütüphaneleri (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <!-- CSS Dosyamızı Bağlıyoruz -->
+    <link rel="stylesheet" href="style.css">
+    <!-- İkon Seti (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ÜST MENÜ (Header) -->
+    <header>
+        <div class="container nav-container">
+            <!-- Logo Alanı -->
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-heart-pulse"></i>
+                Medi<span>Clear</span>
+            </a>
+
+            <!-- Mobil Menü Butonu (Sadece telefonda görünür) -->
+            <button class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <!-- Linkler -->
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Ana Sayfa</a></li>
+                    <li><a href="glossary.html">Terimler Sözlüğü</a></li>
+                    <li><a href="blog.html">Sağlıklı Yaşam</a></li>
+                    <!-- AI Analist Butonu -->
+                    <li><a href="analyst.html" class="btn btn-primary">AI Analist</a></li>
+                    <!-- Not: "Giriş Yap" butonu 'auth.js' tarafından buraya otomatik eklenecek -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- KAHRAMAN BÖLÜMÜ (Hero Section) - İlk görülen büyük alan -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div>
+                <h1>Tahlillerinizi<br><span>Yapay Zeka</span> Gözüyle Görün</h1>
+                <p>Artık sadece metin değil, fotoğraf da yükleyebilirsiniz. MediClear, tahlil sonuçlarınızı görür, okur
+                    ve size doktor gibi açıklar.</p>
+                <div class="hero-buttons">
+                    <a href="analyst.html" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        <i class="fa-solid fa-camera"></i> Hemen Analiz Et
+                    </a>
+                    <a href="#nasil-calisir" class="btn btn-outline" style="background: white; color: var(--primary);">
+                        <i class="fa-solid fa-circle-play"></i> Nasıl Çalışır?
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image" style="font-size: 10rem; color: rgba(255,255,255,0.2); text-align: center;">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="container" style="padding: var(--space-xl) 0;">
+        <div class="section-title">
+            <h2>3 Katmanlı Yapay Zeka Teknolojisi</h2>
+            <p>Sıradan bir çeviri değil. Gören, düşünen ve konuşan 3 farklı zeka sizin için çalışıyor.</p>
+        </div>
+
+        <div class="grid">
+            <!-- FEATURE 1: VISION -->
+            <div class="card" style="text-align: center;">
+                <div class="icon-box"
+                    style="background: #e0f7fa; color: #00bcd4; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 1.5rem;">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+                <h3>1. Gören Göz (LLaVA)</h3>
+                <p>Tahlil kağıdınızın fotoğrafını yükleyin. Gelişmiş görsel zeka modelimiz, kağıttaki değerleri
+                    milimetrik hassasiyetle okur ve metne döker.</p>
+            </div>
+
+            <!-- FEATURE 2: BRAIN -->
+            <div class="card" style="text-align: center;">
+                <div class="icon-box"
+                    style="background: #e8eaf6; color: #3f51b5; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 1.5rem;">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3>2. Tıbbi Akıl (Mistral)</h3>
+                <p>Okunan değerler, binlerce tıp makalesiyle eğitilmiş doktora seviyesindeki "Mistral" modeline
+                    iletilir. Sonuçlarınız tıbbi açıdan değerlendirilir.</p>
+            </div>
+
+            <!-- FEATURE 3: TONGUE -->
+            <div class="card" style="text-align: center;">
+                <div class="icon-box"
+                    style="background: #f3e5f5; color: #9c27b0; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 1.5rem;">
+                    <i class="fa-solid fa-language"></i>
+                </div>
+                <h3>3. Anlaşılır Dil (Gemma)</h3>
+                <p>Karmaşık doktor notları, çevirmen modelimiz "Gemma" tarafından sizin dilinize ve herkesin
+                    anlayabileceği sade bir Türkçeye çevrilir.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- NASIL ÇALIŞIR (Pankart Stili) -->
+    <section id="nasil-calisir" style="padding: var(--space-xl) 0;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nasıl Kullanılır?</h2>
+                <p>Sadece 3 adımda sağlığınızı anlayın.</p>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: var(--space-lg); flex-wrap: wrap;">
+                <!-- Adım 1 -->
+                <div class="step-card">
+                    <span class="step-num">01</span>
+                    <i class="fa-solid fa-camera" style="font-size: 2rem; color: white; margin-bottom: 1rem;"></i>
+                    <h4>Fotoğrafı Yükle</h4>
+                    <p>Tahlil sonucunun fotoğrafını çekin veya metni yapıştırın.</p>
+                </div>
+                <!-- Adım 2 -->
+                <div class="step-card">
+                    <span class="step-num">02</span>
+                    <i class="fa-solid fa-wand-magic-sparkles"
+                        style="font-size: 2rem; color: white; margin-bottom: 1rem;"></i>
+                    <h4>Analiz Etsin</h4>
+                    <p>Yapay zeka milisaniyeler içinde okur, düşünür ve yorumlar.</p>
+                </div>
+                <!-- Adım 3 -->
+                <div class="step-card">
+                    <span class="step-num">03</span>
+                    <i class="fa-solid fa-file-medical" style="font-size: 2rem; color: white; margin-bottom: 1rem;"></i>
+                    <h4>Sonucu Öğren</h4>
+                    <p>Karmaşık terimlerden arınmış raporunuz cebinizde.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" style="text-align: center; padding: var(--space-xl) 0;">
+        <div class="container">
+            <div
+                style="background: linear-gradient(135deg, var(--dark), var(--primary)); padding: 3rem; border-radius: 20px; color: white; box-shadow: var(--shadow-lg);">
+                <h2 style="color: white; margin-bottom: 1rem;">Sağlığınız Hakkında Karanlıkta Kalmayın</h2>
+                <p style="margin-bottom: 2rem; opacity: 0.9;">Hemen şimdi ücretsiz analiz yapın ve sonuçlarınızı
+                    öğrenin.</p>
+                <a href="analyst.html" class="btn"
+                    style="background: white; color: var(--primary); padding: 1rem 3rem; font-weight: bold; border-radius: 50px;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Analizi Başlat
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTTOM FEATURES (Neden MediClear - Yatay Stil) -->
+    <section class="why-section">
+        <div class="container">
+            <div class="why-grid">
+                <!-- Kart 1 -->
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-language"></i></div>
+                    <div>
+                        <h3>Basit Dil</h3>
+                        <p>Doktor jargonunu, herkesin anlayabileceği "halk diline" çevirir.</p>
+                    </div>
+                </div>
+                <!-- Kart 2 -->
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <div>
+                        <h3>Hızlı Sonuç</h3>
+                        <p>Beklemeden, randevu almadan saniyeler içinde analiz.</p>
+                    </div>
+                </div>
+                <!-- Kart 3 -->
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div>
+                        <h3>Güvenilir Altyapı</h3>
+                        <p>Google ve Mistral teknolojileriyle güçlü ve tutarlı analizler.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ALT BİLGİ (Footer) -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <!-- Marka Bilgisi -->
+                <div class="footer-brand">
+                    <h3>MediClear</h3>
+                    <p>Sağlığınızı anlamanız için yanınızdayız.</p>
+                </div>
+                <!-- Linkler -->
+                <div class="footer-links">
+                    <h4>Hızlı Erişim</h4>
+                    <ul>
+                        <li><a href="index.html">Ana Sayfa</a></li>
+                        <li><a href="glossary.html">Terimler Sözlüğü</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="analyst.html">AI Analist</a></li>
+                    </ul>
+                </div>
+                <!-- Yasal Uyarı -->
+                <div class="footer-legal">
+                    <h4>Yasal Uyarı</h4>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                        Bu sitede verilen bilgiler tıbbi tavsiye niteliğinde değildir. Sadece bilgilendirme amaçlıdır.
+                        Kesin tanı ve tedavi için lütfen doktorunuza danışınız.
+                    </p>
+                </div>
+            </div>
+            <!-- Telif Hakkı -->
+            <div class="copyright">
+                &copy; 2024 MediClear. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Dosyaları (Sırası Önemli!) -->
+    <!-- 1. Önce Auth (Giriş) mantığı -->
+    <script src="auth.js"></script>
+    <!-- 2. Sonra Genel site mantığı -->
+    <script src="script.js"></script>
+</body>
+
+</html>

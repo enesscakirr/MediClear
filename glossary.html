@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terimler Sözlüğü - MediClear</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto var(--space-xl);
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--radius-full);
+            font-size: 1.1rem;
+            transition: all var(--transition-speed);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .glossary-grid {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .term-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all var(--transition-speed);
+        }
+
+        .term-header {
+            padding: var(--space-md);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .term-header:hover {
+            background: var(--background);
+        }
+
+        .term-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .term-icon {
+            transition: transform var(--transition-speed);
+        }
+
+        .term-content {
+            padding: 0 var(--space-md);
+            max-height: 0;
+            overflow: hidden;
+            transition: all var(--transition-speed);
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .term-card.active .term-content {
+            padding: 0 var(--space-md) var(--space-md);
+            max-height: 500px;
+            /* Arbitrary large height */
+        }
+
+        .term-card.active .term-icon {
+            transform: rotate(180deg);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: var(--space-xl);
+            color: var(--text-light);
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo"><i class="fa-solid fa-heart-pulse"></i> Medi<span>Clear</span></a>
+            <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Ana Sayfa</a></li>
+                    <li><a href="glossary.html">Terimler Sözlüğü</a></li>
+                    <li><a href="blog.html">Sağlıklı Yaşam</a></li>
+                    <li><a href="analyst.html" class="btn btn-primary">AI Analist</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container" style="padding-top: var(--space-xl); padding-bottom: var(--space-xl);">
+        <div class="section-title">
+            <h2>Tıbbi Terimler Sözlüğü</h2>
+            <p>Laboratuvar sonuçlarındaki karmaşık kısaltmaların anlamlarını öğrenin.</p>
+        </div>
+
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Terim ara (örn: Hemogram, ALT)...">
+        </div>
+
+        <div class="glossary-grid" id="glossaryGrid">
+            <!-- Items injected by JS -->
+        </div>
+        <div id="noResults" class="no-results">
+            <i class="fa-regular fa-face-frown" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+            <p>Aradığınız terim bulunamadı.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">&copy; 2024 MediClear.</div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="glossary.js"></script>
+</body>
+
+</html>

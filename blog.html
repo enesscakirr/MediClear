@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sağlıklı Yaşam İpuçları - MediClear</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .blog-header {
+            text-align: center;
+            padding: var(--space-xl) 0;
+            background: linear-gradient(135deg, #e0f7fa 0%, #fff 100%);
+            margin-bottom: var(--space-xl);
+        }
+
+        .blog-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .blog-img {
+            height: 200px;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 3rem;
+        }
+
+        .blog-content {
+            padding: var(--space-lg);
+            flex-grow: 1;
+        }
+
+        .blog-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(0, 119, 182, 0.1);
+            color: var(--primary);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .blog-title {
+            font-size: 1.4rem;
+            margin-bottom: var(--space-sm);
+            color: var(--dark);
+        }
+
+        .blog-excerpt {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .read-more {
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .read-more:hover {
+            gap: 0.8rem;
+            /* slight movement animation */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo"><i class="fa-solid fa-heart-pulse"></i> Medi<span>Clear</span></a>
+            <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Ana Sayfa</a></li>
+                    <li><a href="glossary.html">Terimler Sözlüğü</a></li>
+                    <li><a href="blog.html">Sağlıklı Yaşam</a></li>
+                    <li><a href="analyst.html" class="btn btn-primary">AI Analist</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="blog-header">
+        <div class="container">
+            <h1>Sağlıklı Yaşam İpuçları</h1>
+            <p style="max-width: 600px; margin: 0 auto; color: var(--text-light);">Güncel sağlık önerileri, beslenme
+                tavsiyeleri ve yaşam kalitenizi artıracak ipuçları.</p>
+        </div>
+    </div>
+
+    <div class="container" style="padding-bottom: var(--space-xl);">
+        <div class="grid">
+            <!-- Article 1 -->
+            <article class="blog-card">
+                <div class="blog-img" style="background: linear-gradient(45deg, #ff9a9e, #fad0c4);">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="blog-tag">Kalp Sağlığı</span>
+                    <h3 class="blog-title">Kalbiniz İçin 5 Altın Kural</h3>
+                    <p class="blog-excerpt">Düzenli egzersiz ve doğru beslenme ile kalp hastalıkları riskini nasıl
+                        azaltabilirsiniz?</p>
+                    <div class="blog-full-text" style="display: none; margin-top: 1rem; color: var(--text);">
+                        <p>1. Haftada en az 150 dakika orta tempolu yürüyüş yapın.</p>
+                        <p>2. Tuz tüketimini günlük 5 gramın altına düşürün.</p>
+                        <p>3. Doymuş yağlardan uzak durun, zeytinyağı tercih edin.</p>
+                        <p>4. Stres yönetimi için meditasyon veya yoga deneyin.</p>
+                        <p>5. Düzenli check-up yaptırarak tansiyon ve kolesterolünüzü takip edin.</p>
+                    </div>
+                    <button class="read-more-btn btn-link"
+                        style="background:none; border:none; cursor:pointer; padding:0;">
+                        <span class="read-more">Devamını Oku <i class="fa-solid fa-arrow-right"></i></span>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="blog-card">
+                <div class="blog-img" style="background: linear-gradient(45deg, #a18cd1, #fbc2eb);">
+                    <i class="fa-solid fa-bed"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="blog-tag">Uyku</span>
+                    <h3 class="blog-title">Kaliteli Uykunun Önemi</h3>
+                    <p class="blog-excerpt">Günde 7-8 saat uyumanın bağışıklık sistemi üzerindeki etkilerini biliyor
+                        musunuz?</p>
+                    <div class="blog-full-text" style="display: none; margin-top: 1rem; color: var(--text);">
+                        <p>Uyku sırasında vücudumuz onarım moduna geçer. Yetersiz uyku:</p>
+                        <ul style="margin-left: 1.5rem; list-style: disc;">
+                            <li>Hafıza problemlerine yol açar.</li>
+                            <li>Bağışıklık sistemini zayıflatır.</li>
+                            <li>Kilo alımını tetikler.</li>
+                        </ul>
+                        <p>Yatmadan önce ekran maruziyetini azaltmak uyku kalitenizi artırır.</p>
+                    </div>
+                    <button class="read-more-btn btn-link"
+                        style="background:none; border:none; cursor:pointer; padding:0;">
+                        <span class="read-more">Devamını Oku <i class="fa-solid fa-arrow-right"></i></span>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="blog-card">
+                <div class="blog-img" style="background: linear-gradient(45deg, #84fab0, #8fd3f4);">
+                    <i class="fa-solid fa-apple-whole"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="blog-tag">Beslenme</span>
+                    <h3 class="blog-title">Bağışıklık Güçlendirici Besinler</h3>
+                    <p class="blog-excerpt">Mevsim geçişlerinde hastalıklardan korunmak için tüketmeniz gereken süper
+                        gıdalar.</p>
+                    <div class="blog-full-text" style="display: none; margin-top: 1rem; color: var(--text);">
+                        <p><strong>C Vitamini:</strong> Portakal, kivi, biber.</p>
+                        <p><strong>Çinko:</strong> Kabak çekirdeği, badem.</p>
+                        <p><strong>Probiyotikler:</strong> Yoğurt, kefir.</p>
+                        <p>Bu besinleri düzenli tüketmek, vücudun savunma mekanizmasını güçlendirir.</p>
+                    </div>
+                    <button class="read-more-btn btn-link"
+                        style="background:none; border:none; cursor:pointer; padding:0;">
+                        <span class="read-more">Devamını Oku <i class="fa-solid fa-arrow-right"></i></span>
+                    </button>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">&copy; 2024 MediClear.</div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="blog.js"></script>
+</body>
+
+</html>

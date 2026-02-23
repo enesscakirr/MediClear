@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analist - MediClear</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Markdown parser for AI response -->
+    <style>
+        .analyst-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+        }
+
+        .chat-box {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: var(--space-lg);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: var(--space-lg);
+        }
+
+        .input-area {
+            position: relative;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: var(--space-md);
+            border: 2px solid #e0e0e0;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color var(--transition-speed);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .analyze-btn {
+            margin-top: var(--space-md);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .analyze-btn:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-area {
+            margin-top: var(--space-xl);
+            display: none;
+            /* Hidden by default */
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+            border-left: 5px solid var(--primary);
+            padding: var(--space-lg);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .disclaimer-box {
+            background: #fff3cd;
+            color: #856404;
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            font-size: 0.9rem;
+            border: 1px solid #ffeeba;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Markdown Styles */
+        .markdown-body h1,
+        .markdown-body h2,
+        .markdown-body h3 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .markdown-body p {
+            margin-bottom: 1rem;
+        }
+
+        .markdown-body ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            list-style-type: disc;
+        }
+
+        .markdown-body strong {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo"><i class="fa-solid fa-heart-pulse"></i> Medi<span>Clear</span></a>
+            <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Ana Sayfa</a></li>
+                    <li><a href="glossary.html">Terimler Sözlüğü</a></li>
+                    <li><a href="blog.html">Sağlıklı Yaşam</a></li>
+                    <li><a href="analyst.html" class="btn btn-primary">AI Analist</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="analyst-container">
+        <div class="section-title">
+            <h2>AI Analist</h2>
+            <p>Laboratuvar sonuçlarınızı veya doktor notlarınızı aşağıya yapıştırın.</p>
+        </div>
+
+        <div class="chat-box">
+            <div class="input-area">
+                <!-- Resim Yükleme UI -->
+                <div class="image-upload-container"
+                    style="margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem;">
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                    <button id="uploadBtn" class="btn btn-outline" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                        <i class="fa-solid fa-camera"></i> Fotoğraf Yükle
+                    </button>
+                    <span id="fileName" style="font-size: 0.9rem; color: #666;"></span>
+                </div>
+                <!-- Önizleme -->
+                <div id="imagePreview" style="display: none; margin-bottom: 1rem;">
+                    <img src="" alt="Preview" style="max-height: 200px; border-radius: 8px; border: 2px solid #0077b6;">
+                    <button id="removeImageBtn"
+                        style="background: none; border: none; color: #e76f51; cursor: pointer; margin-left: 0.5rem;">
+                        <i class="fa-solid fa-trash"></i> Sil
+                    </button>
+                </div>
+
+                <textarea id="medicalInput"
+                    placeholder="Örn: 'Hemoglobin 11.2, WBC 12.5, CRP 5.4. Doktor viral enfeksiyon olabilir dedi ama anlamadım...'"></textarea>
+            </div>
+            <button id="analyzeBtn" class="btn btn-primary analyze-btn">
+                <span>Analiz Et</span>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <div class="loading-spinner"></div>
+            </button>
+        </div>
+
+        <div id="resultArea" class="result-area">
+            <h3>Analiz Sonucu:</h3>
+            <div id="aiOutput" class="result-card markdown-body">
+                <!-- AI Output will appear here -->
+            </div>
+        </div>
+
+        <div class="disclaimer-box">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.5rem;"></i>
+            <div>
+                <strong>ÖNEMLİ UYARI:</strong>
+                Bu analiz yapay zeka tarafından oluşturulmuştur ve tıbbi tavsiye yerine geçmez. Sadece bilgilendirme
+                amaçlıdır. Lütfen sonuçlarınızı mutlaka doktorunuzla değerlendirin.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">&copy; 2024 MediClear.</div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="analyst.js"></script>
+</body>
+
+</html>
