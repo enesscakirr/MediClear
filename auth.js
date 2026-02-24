@@ -1,127 +1,208 @@
-/**
- * AUTH.JS - KULLANICI GİRİŞ SİSTEMİ
- * 
- * Bu dosya, sitenin güvenlik görevlisidir. 
- * Kullanıcıların kayıt olmasını, giriş yapmasını ve çıkış işlemini yönetir.
- * Gerçek bir sunucu olmadığı için bilgileri tarayıcının hafızasına (LocalStorage) yazar.
- */
-
 class Auth {
     constructor() {
-        // Tarayıcı hafızasından kayıtlı tüm kullanıcıları al
-        // Eğer hiç kullanıcı yoksa boş bir liste ([]) başlat
-        this.users = JSON.parse(localStorage.getItem('users')) || [];
-
-        // Şu an giriş yapmış olan kullanıcıyı hafızadan al
-        // Eğer kimse giriş yapmamışsa 'null' (boş) döner
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        // Backend sunucunuzun temel URL adresi
+        this.baseURL = 'http://localhost:5000/api/auth';
+        this.tokenKey = 'mediclear_token';
     }
 
-    // --- KAYIT OLMA FONKSİYONU ---
-    register(name, email, password) {
-        // Kontrol 1: Bu e-posta ile daha önce kayıt olunmuş mu?
-        if (this.users.find(user => user.email === email)) {
-            return { success: false, message: 'Bu e-posta adresi zaten kayıtlı.' };
+    /**
+     * Kullanıcı kayıt isteği atar
+     * @param {string} name 
+     * @param {string} email 
+     * @param {string} password 
+     * @returns {Promise<Object>} Backend'den dönen response datası
+     */
+    async register(name, email, password) {
+        try {
+            const response = await fetch(`${this.baseURL}/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const data = await response.json();
+
+            // Eğer backend 400 ya da 500 gibi hata kodları döndüyse hatayı fırlat
+            if (!response.ok) {
+                throw new Error(data.message || 'Kayıt olurken bilinmeyen bir hata oluştu.');
+            }
+
+            return data;
+        } catch (error) {
+            console.error('Kayıt İşlemi Başarısız:', error);
+            throw error;
         }
-
-        // Yeni kullanıcı objesi oluştur
-        const newUser = {
-            id: Date.now(), // Benzersiz bir kimlik numarası (şu anki zaman)
-            name,
-            email,
-            password // NOT: Gerçek projelerde şifreler şifrelenerek (hash) saklanmalıdır!
-        };
-
-        // Listeye ekle ve hafızayı güncelle
-        this.users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(this.users));
-
-        return { success: true, message: 'Kayıt başarılı! Giriş yapabilirsiniz.' };
     }
 
-    // --- GİRİŞ YAPMA FONKSİYONU ---
-    login(email, password) {
-        // Kullanıcı listesinde e-postası ve şifresi eşleşen birini ara
-        const user = this.users.find(u => u.email === email && u.password === password);
+    /**
+     * Kullanıcı giriş isteği atar. Başarılıysa Token'i kaydeder.
+     * @param {string} email 
+     * @param {string} password 
+     * @returns {Promise<Object>} Backend'den dönen response datası
+     */
+    async login(email, password) {
+        try {
+            const response = await fetch(`${this.baseURL}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
 
-        if (user) {
-            // Eşleşme bulundu, 'currentUser' olarak işaretle
-            this.currentUser = user;
-            // Tarayıcı kapatılsa bile hatırla
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            return { success: true, message: 'Giriş başarılı.' };
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Giriş başarısız oldu.');
+            }
+
+            // Başarılı girişte Token'ı LocalStorage'a kaydet
+            localStorage.setItem(this.tokenKey, data.token);
+            // Kullanıcı bilgilerini de kaydet
+            localStorage.setItem('mediclear_user', JSON.stringify(data.user));
+
+            return data;
+        } catch (error) {
+            console.error('Giriş İşlemi Başarısız:', error);
+            throw error;
         }
-
-        // Eşleşme yoksa hata dön
-        return { success: false, message: 'E-posta veya şifre hatalı.' };
     }
 
-    // --- ÇIKIŞ YAPMA FONKSİYONU ---
-    logout() {
-        this.currentUser = null;
-        // Hafızadan 'şu anki kullanıcı' bilgisini sil
-        localStorage.removeItem('currentUser');
-        // Ana sayfaya yönlendir
-        window.location.href = 'index.html';
-    }
-
-    // Kullanıcı giriş yapmış mı? (Evet/Hayır döner)
+    /**
+     * Kullanıcı sistemde giriş yapmış durumda mı kontrol eder.
+     * @returns {boolean}
+     */
     isLoggedIn() {
-        return !!this.currentUser; // '!!' işareti değeri true/false'a çevirir
+        const token = localStorage.getItem(this.tokenKey);
+        // İleri seviyede token'in formatı ve geçerlilik süresi de (decode edilerek) test edilebilir.
+        return !!token; // token varsa true, null ise false döner.
     }
 
-    // Giriş yapmış kullanıcının bilgilerini ver
+    /**
+     * LocalStorage'daki geçerli kullanıcı bilgilerini getirir.
+     * @returns {Object|null}
+     */
     getCurrentUser() {
-        return this.currentUser;
+        const user = localStorage.getItem('mediclear_user');
+        return user ? JSON.parse(user) : null;
+    }
+
+    /**
+     * Kullanıcı profilini backend'den getirir (JWT ile korumalı)
+     * @returns {Promise<Object>} Backend'den dönen profile datası
+     */
+    async getProfile() {
+        try {
+            const token = localStorage.getItem(this.tokenKey);
+            const response = await fetch(`${this.baseURL}/profile`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.message || 'Profil yüklenemedi.');
+            return data;
+        } catch (error) {
+            console.error('Profil Getirme Hatası:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Kullanıcı profilini backend'de günceller
+     * @param {Object} profileData - {name, email, password}
+     * @returns {Promise<Object>} Backend'den dönen response datası
+     */
+    async updateProfile(profileData) {
+        try {
+            const token = localStorage.getItem(this.tokenKey);
+            const response = await fetch(`${this.baseURL}/profile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(profileData)
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.message || 'Profil güncellenemedi.');
+
+            // Eğer profil başarıyla güncellendiyse LocalStorage'ı da güncelle
+            if (data.user) {
+                localStorage.setItem('mediclear_user', JSON.stringify(data.user));
+            }
+            return data;
+        } catch (error) {
+            console.error('Profil Güncelleme Hatası:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Kullanıcı çıkışı yapar, tokeni siler ve ana sayfaya yönlendirir.
+     */
+    logout() {
+        localStorage.removeItem(this.tokenKey);
+        localStorage.removeItem('mediclear_user');
+
+        // Çıkış sonrası kullanılacak ana sayfa dizini (projenize göre değiştirebilirsiniz)
+        window.location.href = '/index.html';
     }
 }
 
-// Auth sınıfından bir örnek oluştur (artık 'auth' değişkeni ile her yerden erişilebilir)
+// Uygulamada kullanmak üzere instance oluşturalım
 const auth = new Auth();
+
 
 // --- NAVBAR GÜNCELLEME ---
 // Sağ üstteki menüyü duruma göre (Giriş Yap / Çıkış) değiştirir
 function updateNavbarAuth() {
-    // Menü listesini bul (<ul class="nav-links">)
-    const navLinks = document.querySelector('.nav-links');
-    if (!navLinks) return; // Eğer menü yoksa (bazı sayfalarda olmayabilir) dur
+    // Tüm navigasyon barını kapsayan ana konteyneri bul
+    const navContainer = document.querySelector('.nav-container');
+    if (!navContainer) return;
 
-    // Daha önce eklenmiş buton varsa temizle (tekrar tekrar eklenmesin)
-    const existingAuthBtn = navLinks.querySelector('.auth-btn-group');
+    // Daha önce eklenmiş buton grubu varsa temizle (tekrar tekrar eklenmesin)
+    const existingAuthBtn = document.querySelector('.auth-btn-group');
     if (existingAuthBtn) existingAuthBtn.remove();
 
-    // Yeni bir liste elemanı (<li>) oluştur
-    const authLi = document.createElement('li');
-    authLi.className = 'auth-btn-group';
+    // Yeni bir div oluştur (Artık ul içinde değil, ana barda sağda duracak)
+    const authDiv = document.createElement('div');
+    authDiv.className = 'auth-btn-group';
 
     // Görünüm ayarları (CSS yerine buradan hızlıca stil verildi)
-    authLi.style.marginLeft = '1rem';
-    authLi.style.display = 'flex';
-    authLi.style.alignItems = 'center';
-    authLi.style.gap = '1rem';
+    authDiv.style.display = 'flex';
+    authDiv.style.alignItems = 'center';
+    authDiv.style.gap = '1rem';
 
     // DURUM KONTROLÜ
     if (auth.isLoggedIn()) {
         // -- DURUM 1: GİRİŞ YAPILMIŞ --
-        const user = auth.getCurrentUser();
-        // İsim göster ve "Çıkış" butonu koy
-        authLi.innerHTML = `
-            <span style="font-weight: 500; color: var(--primary);">Merhaba, ${user.name}</span>
-            <button onclick="auth.logout()" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
-                <i class="fa-solid fa-right-from-bracket"></i> Çıkış
+        const user = auth.getCurrentUser() || { name: 'Kullanıcı' };
+        // İsim göster, profil butonu ve kırmızı "Çıkış" butonu koy
+        authDiv.innerHTML = `
+            <span class="user-greeting" style="font-weight: 500; color: var(--primary);">Merhaba, ${user.name}</span>
+            <a href="profile.html" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem; background-color: var(--secondary);">
+                <i class="fa-solid fa-user"></i> Profilim
+            </a>
+            <button onclick="auth.logout()" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background-color: #e63946; color: white; border: none; cursor: pointer; border-radius: 5px;">
+                <i class="fa-solid fa-right-from-bracket"></i> Çıkış 
             </button>
         `;
     } else {
         // -- DURUM 2: GİRİŞ YAPILMAMIŞ --
         // "Giriş Yap" ve "Kayıt Ol" butonlarını koy
-        authLi.innerHTML = `
+        authDiv.innerHTML = `
             <a href="login.html" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Giriş Yap</a>
             <a href="register.html" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Kayıt Ol</a>
         `;
     }
 
-    // Hazırlanan butonları menüye ekle
-    navLinks.appendChild(authLi);
+    // Oluşturulan bu bağımsız alanı Ana Container'ın en sonuna (en sağına) ekle
+    navContainer.appendChild(authDiv);
 }
 
 // --- GÜVENLİK KONTROLÜ ---

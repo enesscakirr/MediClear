@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayıt Ol - MediClear</title>
+    <title>Profilim - MediClear</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .auth-container {
+        .profile-container {
             min-height: 80vh;
             display: flex;
             align-items: center;
@@ -20,13 +20,13 @@
             background: linear-gradient(135deg, rgba(144, 224, 239, 0.1) 0%, rgba(0, 119, 182, 0.05) 100%);
         }
 
-        .auth-card {
+        .profile-card {
             background: var(--white);
             padding: var(--space-xl);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-lg);
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             animation: fadeIn 0.5s ease;
         }
 
@@ -42,12 +42,12 @@
             }
         }
 
-        .auth-header {
+        .profile-header {
             text-align: center;
             margin-bottom: var(--space-lg);
         }
 
-        .auth-header h2 {
+        .profile-header h2 {
             font-size: 2rem;
             color: var(--primary);
             margin-bottom: var(--space-sm);
@@ -79,31 +79,23 @@
             border-color: var(--primary);
         }
 
-        .auth-footer {
-            margin-top: var(--space-lg);
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        .auth-footer a {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .auth-footer a:hover {
-            text-decoration: underline;
-        }
-
-        #errorMsg {
-            color: var(--danger);
+        #messageBox {
             text-align: center;
             margin-bottom: var(--space-md);
             display: none;
             font-size: 0.9rem;
-            background: rgba(231, 111, 81, 0.1);
             padding: 0.5rem;
             border-radius: var(--radius-md);
+        }
+
+        .msg-success {
+            color: #2a9d8f;
+            background: rgba(42, 157, 143, 0.1);
+        }
+
+        .msg-error {
+            color: var(--danger);
+            background: rgba(231, 111, 81, 0.1);
         }
     </style>
 </head>
@@ -125,16 +117,16 @@
         </div>
     </header>
 
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <h2>Kayıt Ol</h2>
-                <p>Sağlık yolculuğunuza başlayın</p>
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h2>Profil Bilgilerim</h2>
+                <p>Kişisel bilgilerinizi görüntüleyin ve güncelleyin</p>
             </div>
 
-            <div id="errorMsg"></div>
+            <div id="messageBox"></div>
 
-            <form id="registerForm">
+            <form id="profileForm">
                 <div class="form-group">
                     <label for="name">Ad Soyad</label>
                     <input type="text" id="name" class="form-control" required>
@@ -143,38 +135,80 @@
                     <label for="email">E-posta</label>
                     <input type="email" id="email" class="form-control" required>
                 </div>
+                <!-- Şifre güncellemesi opsiyonel olduğu için required değil -->
                 <div class="form-group">
-                    <label for="password">Şifre</label>
-                    <input type="password" id="password" class="form-control" required>
+                    <label for="password">Yeni Şifre (Değiştirmek istemiyorsanız boş bırakın)</label>
+                    <input type="password" id="password" class="form-control" placeholder="******">
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Hesap Oluştur</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fa-solid fa-save"></i> Değişiklikleri Kaydet
+                </button>
             </form>
-
-            <div class="auth-footer">
-                Zaten hesabınız var mı? <a href="login.html">Giriş Yap</a>
-            </div>
         </div>
     </div>
 
+    <!-- Alt Kısım -->
+    <footer>
+        <div class="container" style="text-align: center; padding: 2rem 0; color: var(--text-light);">
+            &copy; 2024 MediClear. Tüm hakları saklıdır.
+        </div>
+    </footer>
+
     <script src="auth.js"></script>
     <script src="script.js"></script>
+
     <script>
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        // Sayfa açıldığında mevcut profil bilgilerini doldur
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Eğer giriş yapmamışsa, checkAuth() (auth.js içinde) zaten login'e atar.
+            // Sadece ekstra güvenlik ve profil yükleme işlemi yapalım.
+            if (auth.isLoggedIn()) {
+                try {
+                    const profile = await auth.getProfile();
+                    document.getElementById('name').value = profile.name;
+                    document.getElementById('email').value = profile.email;
+                } catch (error) {
+                    const msgBox = document.getElementById('messageBox');
+                    msgBox.textContent = error.message;
+                    msgBox.className = 'msg-error';
+                    msgBox.style.display = 'block';
+                }
+            }
+        });
+
+        // Form gönderildiğinde (Güncelleme)
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('errorMsg');
+
+            const msgBox = document.getElementById('messageBox');
+
+            // Eğer şifre yazılmadıysa hiç göndermeyelim
+            const updateData = { name, email };
+            if (password.trim() !== '') {
+                updateData.password = password;
+            }
 
             try {
-                // auth.register is an async function (returns a Promise)
-                await auth.register(name, email, password);
-                alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
-                window.location.href = 'login.html';
+                await auth.updateProfile(updateData);
+
+                msgBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> Profil başarıyla güncellendi!';
+                msgBox.className = 'msg-success';
+                msgBox.style.display = 'block';
+
+                // Şifre kutusunu temizle
+                document.getElementById('password').value = '';
+
+                // Navbar'daki ismi hemen güncelle (Sayfayı yenilemeye gerek kalmadan)
+                updateNavbarAuth();
+
             } catch (error) {
-                // If the backend returned an error (like user exists), it will be thrown here
-                errorDiv.textContent = error.message;
-                errorDiv.style.display = 'block';
+                msgBox.textContent = error.message;
+                msgBox.className = 'msg-error';
+                msgBox.style.display = 'block';
             }
         });
     </script>

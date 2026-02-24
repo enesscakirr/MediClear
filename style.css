@@ -226,6 +226,19 @@ header {
     /* İki uca yasla */
     align-items: center;
     /* Dikey ortala */
+    position: relative;
+    /* Merkezi tam hesaplamak için */
+    max-width: 100%;
+    /* Sınırı kaldırarak ekranın sonuna kadar uzanmasını sağlar */
+    padding: 0 3%;
+    /* Kenarlardan çok hafif estetik boşluk payı */
+}
+
+/* Sayfa linklerini sayfanın %50 tam ortasına iğnele */
+.nav-container>nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .logo {
