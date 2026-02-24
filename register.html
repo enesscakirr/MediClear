@@ -159,20 +159,21 @@
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script>
-        document.getElementById('registerForm').addEventListener('submit', (e) => {
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMsg');
 
-            const result = auth.register(name, email, password);
-
-            if (result.success) {
+            try {
+                // auth.register is an async function (returns a Promise)
+                await auth.register(name, email, password);
                 alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
                 window.location.href = 'login.html';
-            } else {
-                errorDiv.textContent = result.message;
+            } catch (error) {
+                // If the backend returned an error (like user exists), it will be thrown here
+                errorDiv.textContent = error.message;
                 errorDiv.style.display = 'block';
             }
         });

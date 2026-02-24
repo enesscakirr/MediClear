@@ -155,19 +155,20 @@
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMsg');
 
-            const result = auth.login(email, password);
-
-            if (result.success) {
-                // Redirect to previous page or home
+            try {
+                // auth.login is an async function
+                await auth.login(email, password);
+                // Redirect on success
                 window.location.href = 'index.html';
-            } else {
-                errorDiv.textContent = result.message;
+            } catch (error) {
+                // Show error if login fails
+                errorDiv.textContent = error.message;
                 errorDiv.style.display = 'block';
             }
         });
