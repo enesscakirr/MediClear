@@ -1,85 +1,222 @@
-<h1 align="center">MediClear - Yapay Zeka Destekli Tıbbi Asistan 🩺</h1>
+# 🩺 MediClear — Tıbbi Yapay Zeka Asistanı
 
-<p align="center">
-  Karmaşık tıbbi raporlarınızı ve tahlil sonuçlarınızı, <strong>3-katmanlı yerel yapay zeka (LLaVA, Mistral, Gemma)</strong> teknolojisiyle saniyeler içinde anlayabileceğiniz, herkes için sadeleştirilmiş bir dile çeviren profesyonel Açık Kaynak Web Uygulaması.
-</p>
-
-## 🚀 Projenin Amacı ve Özellikleri
-
-MediClear, hastaların doktorlarından aldıkları "anlaşılmaz" terimlerle dolu laboratuvar ve görüntüleme sonuçlarını analiz etmek için geliştirilmiş bir asistan arayüzüdür.
-
-- 🧠 **3-Katmanlı Yapay Zeka Mimarisi:**
-  - **1. Katman (Görüş):** `LLaVA` modeli sayesinde fiziksel reçeteleri veya tahlil kağıtlarının fotoğraflarını dijital veriye (OCR formatına) çevirebilir.
-  - **2. Katman (Analiz ve RAG):** `Mistral / Medbot` destekli lokal arama yeteneği sayesinde büyük tıbbi veri tabanlarından destek alarak tahlil değerlerini yorumlar.
-  - **3. Katman (Sadeleştirme):** Çıkan karmaşık sonuçları `Gemma` yardımıyla yaşlı veya çocuk hastaların anlayabileceği "insan diline" çevirir.
-- 🔐 **Gelişmiş Kimlik Doğrulama:** bcrypt ile şifrelenmiş parolalar ve yetkisiz erişimi engelleyen JWT korumalı REST API.
-- 🎨 **Modern ve Pürüzsüz Arayüz:** Custom Vanilla CSS ile dizayn edilmiş, flexbox destekli, temiz (clean) responsive tasarım.
-
-## 🛠 Yığın (Tech Stack)
-
-### Frontend (İstemci)
-* **Temel Yapı:** HTML5, CSS3, Vanilla JavaScript
-* **Tasarım Mimarisi:** Custom Grid/Flexbox Layout, Asenkron Fetch API entegrasyonu
-
-### Backend (Sunucu)
-* **Çekirdek:** [Node.js](https://nodejs.org/) ve [Express.js](https://expressjs.com/)
-* **Veritabanı:** [MongoDB](https://www.mongodb.com/) ve Mongoose ODM
-* **Güvenlik Katmanları:** `bcrypt` (şifre hashleme), `jsonwebtoken` (JWT Session)
-
-### Yapay Zeka (AI)
-* **Motor:** [Ollama](https://ollama.ai/) (Yerel, internet gerektirmeyen veri gizliliği odaklı LLM çalıştırıcısı)
-* **Modeller:** LLaVA (Vision), Mistral (Core), Gemma (Summarizer)
+> **MediClear**, tıbbi analiz sonuçlarınızı (kan testi, tahlil raporu vb.) yükleyerek yapay zeka destekli, anlaşılır Türkçe açıklamalar almanızı sağlayan, 3 katmanlı bir açık kaynak web uygulamasıdır.
 
 ---
 
-## 💻 Sistem Gereksinimleri
+## 📐 Mimari
 
-Projeyi kendi ortamınızda ayağa kaldırmak için şunların cihazınızda kurulu olması gerekir:
-1. **Node.js** (v16 veya üzeri)
-2. **MongoDB** (Yerel Community Server veya bulut tabanlı Atlas - Varsayılan Port: `27017`)
-3. **Ollama** (Yapay zeka modellerini yerelde host etmek için kurulu olmalı. API Varsayılan: `11434`)
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      KULLANICI (Browser)                    │
+│         index.html · analyst.html · profile.html vb.        │
+└────────────────────────┬────────────────────────────────────┘
+                         │  HTTP (express.static)
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│              BACKEND-NODE  (Express.js · :5000)             │
+│   • Kullanıcı kaydı / giriş (bcrypt + JWT)                  │
+│   • MongoDB ile kullanıcı verisi                            │
+│   • Frontend dosyalarını statik olarak servis eder          │
+└────────────────────────┬────────────────────────────────────┘
+                         │  POST /api/analyze (HTTP · :8000)
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│             AI-SERVICE  (FastAPI + LangGraph · :8000)       │
+│                                                             │
+│   START                                                     │
+│     │                                                       │
+│     ├─[Görsel varsa]──► vision_node (LLaVA :llava:7b)       │
+│     │                        │                             │
+│     └──────────────────────► translate_to_en (Gemma)        │
+│                                    │                        │
+│                              medical_analysis (MedBot)      │
+│                                    │                        │
+│                              translate_to_tr (Gemma)        │
+│                                    │                        │
+│                                   END                       │
+└────────────────────────┬────────────────────────────────────┘
+                         │  HTTP API (:11434)
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    OLLAMA  (:11434)                          │
+│   • llava:7b          (görsel → Markdown tablo)             │
+│   • translategemma    (TR ↔ EN çeviri)                       │
+│   • Goosedev/medbot   (tıbbi analiz)                         │
+└─────────────────────────────────────────────────────────────┘
+```
 
-## ⚙️ Kurulum Rehberi (Adım Adım)
+---
 
-### 1. Repoyu Klonlayın
+## 🗂️ Klasör Yapısı
+
+```
+MediClear/
+├── frontend/           → HTML, CSS, Vanilla JS (kullanıcı arayüzü)
+├── backend-node/       → Express.js API, MongoDB, JWT Auth
+│   ├── routes/
+│   ├── middleware/
+│   └── models/
+├── ai-service/         → FastAPI + LangGraph + Ollama entegrasyonu
+├── .env                → Gerçek ortam değerleri (Git'e ekleme!)
+├── .env.example        → Değişken şablonu (herkese açık)
+└── README.md
+```
+
+---
+
+## ⚙️ Kurulum ve Çalıştırma
+
+### Ön Gereksinimler
+
+| Araç | Sürüm | Kaynak |
+|------|-------|--------|
+| Node.js | ≥ 18 | [nodejs.org](https://nodejs.org) |
+| MongoDB | ≥ 7 | [mongodb.com](https://www.mongodb.com) |
+| Python | ≥ 3.12 | [python.org](https://www.python.org) |
+| Ollama | En güncel | [ollama.com](https://ollama.com) |
+| uv *(önerilen)* | En güncel | [docs.astral.sh/uv](https://docs.astral.sh/uv) |
+
+---
+
+### 1. Repoyu Klonla
+
 ```bash
 git clone https://github.com/KULLANICI_ADINIZ/MediClear.git
 cd MediClear
 ```
 
-### 2. Gerekli Paketleri (Dependencies) Yükleyin
-Proje kök dizinindeyken Node.js modüllerini kurun:
-```bash
-npm install
-```
+---
 
-### 3. Çevre Değişkenlerini Ayarlayın
-Repo ile birlikte gelen şablon konfigürasyon dosyasını (**.env.example**) kopyalayarak **.env** isimli yeni bir dosya oluşturun:
+### 2. Ortam Değişkenlerini Ayarla
+
 ```bash
-# Windows (PowerShell) için:
+# Şablon dosyasını kopyala
 cp .env.example .env
 ```
-Ardından oluşan `.env` dosyasını favori metin editörünüzde (VS Code vb.) açın ve JWT secret, MongoDB URI gibi değerleri doldurun.
 
-### 4. Sunucuyu Başlatın
-Tüm ayarlar tamamlandığında veritabanı bağlantısı ve Express sunucusunu aktif etmek için:
-```bash
-node server.js
-```
-Konsolda şu mesaji görmelisiniz:
-> `MongoDB veritabanına başarıyla bağlanıldı! 🚀 DB Adı: MediClear`
-> `Sunucu http://localhost:5000 üzerinde çalışıyor.`
+`.env` dosyasını açarak aşağıdaki değişkenleri düzenleyin:
 
-### 5. Frontend'i Çalıştırın
-Tasarımı görüntülemek için bilgisayarınızdaki basit bir statik sunucuyu kullanabilirsiniz (VS Code kullanıyorsanız `Live Server` eklentisi mükemmel çalışır). Tarayıcıda `index.html` sayfasını açtığınız an Backend ile otomatik haberleşecektir.
+| Değişken | Açıklama | Örnek |
+|----------|----------|-------|
+| `PORT` | Node.js sunucu portu | `5000` |
+| `MONGODB_URI` | MongoDB bağlantı adresi | `mongodb://127.0.0.1:27017/MediClear` |
+| `JWT_SECRET` | JWT imzalama anahtarı (güçlü tutun!) | `uzun-rastgele-bir-string` |
+| `OLLAMA_BASE_URL` | Ollama adresi | `http://localhost:11434` |
+| `VISION_MODEL` | LLaVA model adı | `llava:7b` |
+| `TRANSLATOR_MODEL` | Gemma çeviri modeli | `translategemma:latest` |
+| `MEDICAL_MODEL` | Tıbbi analiz modeli | `Goosedev/medbot:latest` |
 
 ---
 
-## 🤝 Katkıda Bulunun
-1. Bu projeyi fork edin (`Fork`)
-2. Yeni özellik dalınızı (`branch`) oluşturun (`git checkout -b feature/YeniOzellik`)
-3. Değişiklikleri commit edin (`git commit -m 'Yeni efsane özellik eklendi'`)
-4. Dalı repoya pushlayın (`git push origin feature/YeniOzellik`)
-5. Bir Pull Request açın!
+### 3. Ollama Modellerini İndir
 
-**Lisans:** MIT Lisansı ile açık kaynaklı sunulmuştur.
+```bash
+ollama pull llava:7b
+ollama pull translategemma:latest
+ollama pull Goosedev/medbot:latest
+
+# Ollama servisinin çalıştığını doğrula
+ollama list
+```
+
+---
+
+### 4. Node.js Backend'i Başlat
+
+```bash
+cd backend-node
+npm install
+
+# Geliştirme (nodemon ile otomatik yeniden başlatma):
+npm run dev
+
+# Üretim:
+npm start
+```
+
+✅ Başarılı log çıktısı:
+```
+[INFO ] MongoDB bağlantısı başarılı! Veritabanı: "MediClear"
+[INFO ] MediClear Backend-Node çalışıyor → http://localhost:5000
+```
+
+---
+
+### 5. Python AI Servisini Başlat
+
+**uv ile (önerilen):**
+```bash
+# Proje kök dizininde
+uv run python -m uvicorn ai_service.main:app --reload --port 8000
+```
+
+**pip ile (alternatif):**
+```bash
+cd ai-service
+python -m venv .venv
+
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
+
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
+
+✅ Başarılı log çıktısı:
+```
+INFO  [mediclear.graph] LangGraph StateGraph başarıyla derlendi (4 node)
+INFO:     Uvicorn running on http://0.0.0.0:8000
+```
+
+---
+
+### 6. Uygulamayı Aç
+
+Tarayıcıda [http://localhost:5000](http://localhost:5000) adresine gidin.
+
+---
+
+## 🔌 API Referansı
+
+### Node.js Backend (`:5000`)
+
+| Method | Endpoint | Açıklama | Auth |
+|--------|----------|----------|------|
+| `POST` | `/api/auth/register` | Yeni kullanıcı kaydı | Hayır |
+| `POST` | `/api/auth/login` | Giriş — JWT döner | Hayır |
+| `GET` | `/api/auth/profile` | Profil getir | JWT Bearer |
+| `PUT` | `/api/auth/profile` | Profil güncelle | JWT Bearer |
+
+### Python AI Service (`:8000`)
+
+| Method | Endpoint | Açıklama |
+|--------|----------|----------|
+| `POST` | `/api/analyze` | Metin/görsel analiz — LangGraph pipeline |
+| `GET` | `/health` | Servis sağlık kontrolü |
+| `GET` | `/docs` | Swagger UI (interaktif API dökümantasyonu) |
+
+---
+
+## 🤝 Katkı
+
+1. Bu repoyu fork edin
+2. Özellik dalı oluşturun: `git checkout -b feat/yeni-ozellik`
+3. Değişikliklerinizi commit edin: `git commit -m 'feat: yeni özellik ekle'`
+4. Dalınızı push edin: `git push origin feat/yeni-ozellik`
+5. Pull Request açın
+
+---
+
+## ⚠️ Sorumluluk Reddi
+
+MediClear yalnızca **bilgi amaçlıdır** ve tıbbi tavsiye yerine geçmez.
+Sağlığınızla ilgili kararlar için her zaman bir doktora başvurun.
+
+---
+
+## 📄 Lisans
+
+MIT Lisansı — Ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
