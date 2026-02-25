@@ -1,38 +1,68 @@
-# Yüklenmeyecek Dosya ve Klasörler (Standart Node.js & IDE)
+# ============================================================
+# MediClear — Kapsamlı .gitignore
+# Node.js + Python + Ortam Değişkenleri + IDE
+# ============================================================
 
-# Bağımlılıklar (Dependencies)
-node_modules/
-package-lock.json # Eger yarn kullanıyorsanız kalsın, npm kullanıyorsanız bu satırı silebilirsiniz. Ancak standart olarak npm pushlanır. Biz npm kullanıyoruz o yüzden package-lock.json SİLMEDİK (pushlanacak).
-
-# Çevresel Değişkenler (Gizli Şifreler)
+# ─── ORTAM DEĞİŞKENLERİ ─────────────────────────────────────
 .env
 .env.local
-.env.development
-.env.production
-.env.test
+.env.*.local
 
-# Log ve Hata Dosyaları
-logs
-*.log
+# ─── NODE.JS ─────────────────────────────────────────────────
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+.npm
+.pnp
+.pnp.js
+dist/
+build/
 
-# Mac & Windows Sistem Dosyaları
+# ─── PYTHON ──────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# Sanal ortamlar
+.venv/
+venv/
+env/
+ENV/
+.env.python
+
+# uv / pip araçları
+uv.lock
+.python-version
+*.egg-info/
+dist/
+*.egg
+.eggs/
+
+# Type checker / linter
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+pyrightconfig.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ─── IDE & EDITÖR ────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
 Thumbs.db
 
-# Editör ve IDE Ayarları
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# İsteğe Bağlı: Build veya Temp klasörleri
-dist/
-build/
-.tmp/
-.temp/
+# ─── TESTLER ─────────────────────────────────────────────────
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
