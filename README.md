@@ -27,7 +27,7 @@
 │   START                                                     │
 │     │                                                       │
 │     ├─[Görsel varsa]──► vision_node (LLaVA :llava:7b)       │
-│     │                        │                             │
+│     │                        │                              │
 │     └──────────────────────► translate_to_en (Gemma)        │
 │                                    │                        │
 │                              medical_analysis (MedBot)      │
@@ -39,10 +39,10 @@
                          │  HTTP API (:11434)
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    OLLAMA  (:11434)                          │
+│                    OLLAMA  (:11434)                         │
 │   • llava:7b          (görsel → Markdown tablo)             │
-│   • translategemma    (TR ↔ EN çeviri)                       │
-│   • Goosedev/medbot   (tıbbi analiz)                         │
+│   • translategemma    (TR ↔ EN çeviri)                      │
+│   • Goosedev/medbot   (tıbbi analiz)                        │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -200,13 +200,13 @@ Tarayıcıda [http://localhost:5000](http://localhost:5000) adresine gidin.
 
 ---
 
-## 🤝 Katkı
+## 🛡️ Güvenlik ve Veri Gizliliği
 
-1. Bu repoyu fork edin
-2. Özellik dalı oluşturun: `git checkout -b feat/yeni-ozellik`
-3. Değişikliklerinizi commit edin: `git commit -m 'feat: yeni özellik ekle'`
-4. Dalınızı push edin: `git push origin feat/yeni-ozellik`
-5. Pull Request açın
+MediClear, kullanıcı verilerinin güvenliğini en üst düzeyde tutmak modern standartları kullanır:
+
+- **Bcrypt Hashing**: Şifreleriniz veritabanına asla düz metin (plain-text) olarak kaydedilmez. Kayıt aşamasında şifreler, tuzlama (salting) yöntemiyle `Bcrypt` algoritması kullanılarak tek yönlü şifrelenir.
+- **JWT (JSON Web Tokens)**: Sistemdeki tüm özel rotalara (profil, oturum kapatma vb.) erişim JWT ile sağlanır. Giriş yapıldığında üretilen token, `Authorization: Bearer <token>` formatında sunucuya gönderilir ve expire (geçerlilik) süresi ile güvenliği artırır.
+- **Veri İzolasyonu**: Python (Yapay Zeka) servisi doğrudan kullanıcı yetki bilgilerine veya şifrelerine erişmez. Backend-Node yalnızca yetkisi doğrulanmış istekleri kabul ederek veri bütünlüğünü sağlar.
 
 ---
 
@@ -214,9 +214,3 @@ Tarayıcıda [http://localhost:5000](http://localhost:5000) adresine gidin.
 
 MediClear yalnızca **bilgi amaçlıdır** ve tıbbi tavsiye yerine geçmez.
 Sağlığınızla ilgili kararlar için her zaman bir doktora başvurun.
-
----
-
-## 📄 Lisans
-
-MIT Lisansı — Ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
