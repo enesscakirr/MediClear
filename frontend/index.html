@@ -38,6 +38,7 @@
                 <ul class="nav-links">
                     <li><a href="index.html">Ana Sayfa</a></li>
                     <li><a href="glossary.html">Terimler Sözlüğü</a></li>
+                    <li><a href="hospitals.html">Yakınımdaki Hastaneler</a></li>
                     <li><a href="blog.html">Sağlıklı Yaşam</a></li>
                     <!-- AI Analist Butonu -->
                     <li><a href="analyst.html" class="btn btn-primary">AI Analist</a></li>
@@ -69,7 +70,7 @@
         </div>
     </section>
 
-    <section id="features" class="container" style="padding: var(--space-xl) 0;">
+    <section id="features" class="container fade-in-section" style="padding: var(--space-xl) 0;">
         <div class="section-title">
             <h2>3 Katmanlı Yapay Zeka Teknolojisi</h2>
             <p>Sıradan bir çeviri değil. Gören, düşünen ve konuşan 3 farklı zeka sizin için çalışıyor.</p>
@@ -77,7 +78,7 @@
 
         <div class="grid">
             <!-- FEATURE 1: VISION -->
-            <div class="card" style="text-align: center;">
+            <div class="card fade-in-child" style="text-align: center;">
                 <div class="icon-box"
                     style="background: #e0f7fa; color: #00bcd4; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 1.5rem;">
                     <i class="fa-solid fa-eye"></i>
@@ -88,7 +89,7 @@
             </div>
 
             <!-- FEATURE 2: BRAIN -->
-            <div class="card" style="text-align: center;">
+            <div class="card fade-in-child" style="text-align: center;">
                 <div class="icon-box"
                     style="background: #e8eaf6; color: #3f51b5; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 1.5rem;">
                     <i class="fa-solid fa-brain"></i>
@@ -99,7 +100,7 @@
             </div>
 
             <!-- FEATURE 3: TONGUE -->
-            <div class="card" style="text-align: center;">
+            <div class="card fade-in-child" style="text-align: center;">
                 <div class="icon-box"
                     style="background: #f3e5f5; color: #9c27b0; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 1.5rem;">
                     <i class="fa-solid fa-language"></i>
@@ -112,7 +113,7 @@
     </section>
 
     <!-- NASIL ÇALIŞIR (Pankart Stili) -->
-    <section id="nasil-calisir" style="padding: var(--space-xl) 0;">
+    <section id="nasil-calisir" class="fade-in-section" style="padding: var(--space-xl) 0;">
         <div class="container">
             <div class="section-title">
                 <h2>Nasıl Kullanılır?</h2>
@@ -121,14 +122,14 @@
 
             <div style="display: flex; justify-content: center; gap: var(--space-lg); flex-wrap: wrap;">
                 <!-- Adım 1 -->
-                <div class="step-card">
+                <div class="step-card fade-in-child" data-step="1">
                     <span class="step-num">01</span>
                     <i class="fa-solid fa-camera" style="font-size: 2rem; color: white; margin-bottom: 1rem;"></i>
                     <h4>Fotoğrafı Yükle</h4>
                     <p>Tahlil sonucunun fotoğrafını çekin veya metni yapıştırın.</p>
                 </div>
                 <!-- Adım 2 -->
-                <div class="step-card">
+                <div class="step-card fade-in-child" data-step="2">
                     <span class="step-num">02</span>
                     <i class="fa-solid fa-wand-magic-sparkles"
                         style="font-size: 2rem; color: white; margin-bottom: 1rem;"></i>
@@ -136,7 +137,7 @@
                     <p>Yapay zeka milisaniyeler içinde okur, düşünür ve yorumlar.</p>
                 </div>
                 <!-- Adım 3 -->
-                <div class="step-card">
+                <div class="step-card fade-in-child" data-step="3">
                     <span class="step-num">03</span>
                     <i class="fa-solid fa-file-medical" style="font-size: 2rem; color: white; margin-bottom: 1rem;"></i>
                     <h4>Sonucu Öğren</h4>
@@ -146,27 +147,148 @@
         </div>
     </section>
 
-    <section class="cta" style="text-align: center; padding: var(--space-xl) 0;">
+    <!-- YENİ ÖZELLİK: Yakınımdaki Hastaneler Tanıtımı -->
+    <section id="hospital-feature" class="fade-in-section" style="padding: var(--space-xl) 0;">
+        <div class="container">
+            <div style="display: flex; align-items: center; gap: 3rem; background: linear-gradient(135deg, rgba(0, 119, 182, 0.07) 0%, rgba(0, 180, 216, 0.1) 100%); border-radius: 24px; padding: 3rem; border: 1px solid rgba(0, 119, 182, 0.12); box-shadow: 0 8px 32px rgba(0, 119, 182, 0.08); flex-wrap: wrap; justify-content: center;">
+                
+                <!-- Sol: İkon & Görsel Alan -->
+                <div style="flex: 0 0 auto; text-align: center;">
+                    <div style="width: 140px; height: 140px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 12px 30px rgba(0, 119, 182, 0.3); position: relative; overflow: hidden;">
+                        <i class="fa-solid fa-hospital" style="font-size: 3.5rem; color: white; z-index: 1;"></i>
+                        <i class="fa-solid fa-location-dot" style="position: absolute; top: 12px; right: 16px; font-size: 1.2rem; color: rgba(255,255,255,0.6); animation: float 3s ease-in-out infinite;"></i>
+                        <i class="fa-solid fa-map-location-dot" style="position: absolute; bottom: 14px; left: 14px; font-size: 1rem; color: rgba(255,255,255,0.4);"></i>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                        <span style="width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; animation: pulse 2s infinite;"></span>
+                        <span style="font-size: 0.8rem; color: var(--success); font-weight: 600;">AI Destekli</span>
+                    </div>
+                </div>
+
+                <!-- Sağ: Açıklama & CTA -->
+                <div style="flex: 1; min-width: 280px;">
+                    <span style="display: inline-block; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: 0.5px;">
+                        <i class="fa-solid fa-sparkles"></i> YENİ ÖZELLİK
+                    </span>
+                    <h2 style="font-size: 2rem; margin-bottom: 0.75rem; background: linear-gradient(135deg, var(--dark), var(--primary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">
+                        <i class="fa-solid fa-map-pin" style="-webkit-text-fill-color: var(--primary); margin-right: 0.5rem;"></i>Yakınımdaki Hastaneler
+                    </h2>
+                    <p style="font-size: 1.05rem; color: var(--text-light); line-height: 1.7; margin-bottom: 1.5rem;">
+                        Konumunuzu yazmanız yeterli! Yapay zeka destekli sistemimiz, bulunduğunuz bölgedeki en yakın hastaneleri 
+                        <strong>harita üzerinde</strong> gösterir. AI teknolojisi ile konum tespiti yaparak, çevrenizdeki sağlık 
+                        kuruluşlarını puanlama ve detay bilgileriyle birlikte listeler.
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                        <a href="hospitals.html" class="btn btn-primary" style="padding: 0.9rem 2rem; font-size: 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-magnifying-glass-location"></i> Hastaneleri Keşfet
+                        </a>
+                        <div style="display: flex; gap: 1.5rem; color: var(--text-light); font-size: 0.85rem;">
+                            <span><i class="fa-solid fa-map" style="color: var(--primary); margin-right: 0.3rem;"></i> Harita Görünümü</span>
+                            <span><i class="fa-solid fa-robot" style="color: var(--primary); margin-right: 0.3rem;"></i> AI Konum Tespiti</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* === SCROLL ANİMASYONLARI === */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        /* Bölüm geçiş animasyonları */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Kartlar için kademeli animasyon */
+        .fade-in-child {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-child.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Bölümler arası yumuşak geçiş çizgisi */
+        section {
+            position: relative;
+        }
+
+        /* CTA bölümü hover efekti */
+        .cta > .container > div {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .cta > .container > div:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Hastane özellik kartı hover */
+        #hospital-feature > .container > div {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        #hospital-feature > .container > div:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 119, 182, 0.12);
+        }
+
+        /* Why kartları için stagger */
+        .why-card:nth-child(1) { transition-delay: 0s; }
+        .why-card:nth-child(2) { transition-delay: 0.15s; }
+        .why-card:nth-child(3) { transition-delay: 0.3s; }
+
+        /* Feature kartları için stagger */
+        #features .card:nth-child(1) { transition-delay: 0s; }
+        #features .card:nth-child(2) { transition-delay: 0.15s; }
+        #features .card:nth-child(3) { transition-delay: 0.3s; }
+
+        /* Step kartları için stagger */
+        .step-card:nth-child(1) { transition-delay: 0s; }
+        .step-card:nth-child(2) { transition-delay: 0.15s; }
+        .step-card:nth-child(3) { transition-delay: 0.3s; }
+    </style>
+
+    <section class="cta fade-in-section" style="text-align: center; padding: var(--space-xl) 0;">
         <div class="container">
             <div
-                style="background: linear-gradient(135deg, var(--dark), var(--primary)); padding: 3rem; border-radius: 20px; color: white; box-shadow: var(--shadow-lg);">
-                <h2 style="color: white; margin-bottom: 1rem;">Sağlığınız Hakkında Karanlıkta Kalmayın</h2>
-                <p style="margin-bottom: 2rem; opacity: 0.9;">Hemen şimdi ücretsiz analiz yapın ve sonuçlarınızı
-                    öğrenin.</p>
+                style="background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent)); padding: 4rem 2rem; border-radius: 32px; color: white; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; z-index: 1;">
+                
+                <!-- Dekoratif Arka Plan Şekilleri -->
+                <div style="position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%; filter: blur(30px); z-index: -1;"></div>
+                <div style="position: absolute; bottom: -50px; right: -50px; width: 150px; height: 150px; background: rgba(0,0,0,0.1); border-radius: 50%; filter: blur(20px); z-index: -1;"></div>
+
+                <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem; letter-spacing: -0.02em;">Sağlığınız Hakkında Karanlıkta Kalmayın</h2>
+                <p style="margin-bottom: 2.5rem; opacity: 0.9; font-size: 1.15rem; max-width: 600px; margin-left: auto; margin-right: auto;">Hemen şimdi yüklü tahlillerinizi analiz edin ve karmaşık tıbbi terimlerin ne anlama geldiğini anında öğrenin.</p>
                 <a href="analyst.html" class="btn"
-                    style="background: white; color: var(--primary); padding: 1rem 3rem; font-weight: bold; border-radius: 50px;">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Analizi Başlat
+                    style="background: white; color: var(--primary); padding: 1.25rem 3.5rem; font-size: 1.1rem; font-weight: 700; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); transition: transform 0.3s ease;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Ücretsiz Analizi Başlat
                 </a>
             </div>
         </div>
     </section>
 
     <!-- BOTTOM FEATURES (Neden MediClear - Yatay Stil) -->
-    <section class="why-section">
+    <section class="why-section fade-in-section">
         <div class="container">
             <div class="why-grid">
                 <!-- Kart 1 -->
-                <div class="why-card">
+                <div class="why-card fade-in-child">
                     <div class="why-icon"><i class="fa-solid fa-language"></i></div>
                     <div>
                         <h3>Basit Dil</h3>
@@ -174,7 +296,7 @@
                     </div>
                 </div>
                 <!-- Kart 2 -->
-                <div class="why-card">
+                <div class="why-card fade-in-child">
                     <div class="why-icon"><i class="fa-solid fa-bolt"></i></div>
                     <div>
                         <h3>Hızlı Sonuç</h3>
@@ -182,7 +304,7 @@
                     </div>
                 </div>
                 <!-- Kart 3 -->
-                <div class="why-card">
+                <div class="why-card fade-in-child">
                     <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
                     <div>
                         <h3>Güvenilir Altyapı</h3>
@@ -208,6 +330,7 @@
                     <ul>
                         <li><a href="index.html">Ana Sayfa</a></li>
                         <li><a href="glossary.html">Terimler Sözlüğü</a></li>
+                    <li><a href="hospitals.html">Yakınımdaki Hastaneler</a></li>
                         <li><a href="blog.html">Blog</a></li>
                         <li><a href="analyst.html">AI Analist</a></li>
                     </ul>
@@ -233,6 +356,46 @@
     <script src="auth.js"></script>
     <!-- 2. Sonra Genel site mantığı -->
     <script src="script.js"></script>
+    <!-- 3. Scroll Animasyonları -->
+    <script>
+        (function() {
+            // Tüm fade-in-section elemanlarını gözlemle
+            const sections = document.querySelectorAll('.fade-in-section');
+            const children = document.querySelectorAll('.fade-in-child');
+
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Bölüm içindeki kademeli çocukları da göster
+                        const kids = entry.target.querySelectorAll('.fade-in-child');
+                        kids.forEach((kid, i) => {
+                            setTimeout(() => kid.classList.add('visible'), i * 150);
+                        });
+                        sectionObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            sections.forEach(section => sectionObserver.observe(section));
+
+            // Bağımsız çocukları da gözlemle (section dışında kalan)
+            const childObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        childObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            children.forEach(child => {
+                if (!child.closest('.fade-in-section')) {
+                    childObserver.observe(child);
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

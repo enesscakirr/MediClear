@@ -79,17 +79,17 @@ log.info(`MongoDB bağlantısı deneniyor: ${MONGODB_URI.replace(/:\/\/.*@/, ':/
 mongoose.connect(MONGODB_URI)
     .then(() => {
         const dbName = mongoose.connection.name;
-        log.info(`✅ MongoDB bağlantısı başarılı! Veritabanı: "${dbName}"`);
+        log.info(` MongoDB bağlantısı başarılı! Veritabanı: "${dbName}"`);
 
         app.listen(PORT, () => {
-            log.info(`✅ MediClear Backend-Node çalışıyor → http://localhost:${PORT}`);
+            log.info(` MediClear Backend-Node çalışıyor → http://localhost:${PORT}`);
             log.info(`   API Rotası      : http://localhost:${PORT}/api/auth`);
             log.info(`   Frontend Servisi: http://localhost:${PORT}/`);
             log.info(`   Python AI Servis: http://localhost:8000 (ayrı süreç)`);
         });
     })
     .catch((err) => {
-        log.error(`❌ MongoDB bağlantısı BAŞARISIZ: ${err.message}`);
+        log.error(` MongoDB bağlantısı BAŞARISIZ: ${err.message}`);
         log.error('   MongoDB servisinin çalışıp çalışmadığını kontrol edin.');
         process.exit(1); // Bağlantı olmadan çalışmaya devam etme
     });

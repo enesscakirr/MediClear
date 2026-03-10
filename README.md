@@ -69,13 +69,13 @@ MediClear/
 
 ### Ön Gereksinimler
 
-| Araç | Sürüm | Kaynak |
-|------|-------|--------|
-| Node.js | ≥ 18 | [nodejs.org](https://nodejs.org) |
-| MongoDB | ≥ 7 | [mongodb.com](https://www.mongodb.com) |
-| Python | ≥ 3.12 | [python.org](https://www.python.org) |
-| Ollama | En güncel | [ollama.com](https://ollama.com) |
-| uv *(önerilen)* | En güncel | [docs.astral.sh/uv](https://docs.astral.sh/uv) |
+| Araç            | Sürüm     | Kaynak                                         |
+| --------------- | --------- | ---------------------------------------------- |
+| Node.js         | ≥ 18      | [nodejs.org](https://nodejs.org)               |
+| MongoDB         | ≥ 7       | [mongodb.com](https://www.mongodb.com)         |
+| Python          | ≥ 3.12    | [python.org](https://www.python.org)           |
+| Ollama          | En güncel | [ollama.com](https://ollama.com)               |
+| uv _(önerilen)_ | En güncel | [docs.astral.sh/uv](https://docs.astral.sh/uv) |
 
 ---
 
@@ -97,15 +97,15 @@ cp .env.example .env
 
 `.env` dosyasını açarak aşağıdaki değişkenleri düzenleyin:
 
-| Değişken | Açıklama | Örnek |
-|----------|----------|-------|
-| `PORT` | Node.js sunucu portu | `5000` |
-| `MONGODB_URI` | MongoDB bağlantı adresi | `mongodb://127.0.0.1:27017/MediClear` |
-| `JWT_SECRET` | JWT imzalama anahtarı (güçlü tutun!) | `uzun-rastgele-bir-string` |
-| `OLLAMA_BASE_URL` | Ollama adresi | `http://localhost:11434` |
-| `VISION_MODEL` | LLaVA model adı | `llava:7b` |
-| `TRANSLATOR_MODEL` | Gemma çeviri modeli | `translategemma:latest` |
-| `MEDICAL_MODEL` | Tıbbi analiz modeli | `Goosedev/medbot:latest` |
+| Değişken           | Açıklama                             | Örnek                                 |
+| ------------------ | ------------------------------------ | ------------------------------------- |
+| `PORT`             | Node.js sunucu portu                 | `5000`                                |
+| `MONGODB_URI`      | MongoDB bağlantı adresi              | `mongodb://127.0.0.1:27017/MediClear` |
+| `JWT_SECRET`       | JWT imzalama anahtarı (güçlü tutun!) | `uzun-rastgele-bir-string`            |
+| `OLLAMA_BASE_URL`  | Ollama adresi                        | `http://localhost:11434`              |
+| `VISION_MODEL`     | LLaVA model adı                      | `llava:7b`                            |
+| `TRANSLATOR_MODEL` | Gemma çeviri modeli                  | `translategemma:latest`               |
+| `MEDICAL_MODEL`    | Tıbbi analiz modeli                  | `Goosedev/medbot:latest`              |
 
 ---
 
@@ -136,6 +136,7 @@ npm start
 ```
 
 ✅ Başarılı log çıktısı:
+
 ```
 [INFO ] MongoDB bağlantısı başarılı! Veritabanı: "MediClear"
 [INFO ] MediClear Backend-Node çalışıyor → http://localhost:5000
@@ -146,12 +147,14 @@ npm start
 ### 5. Python AI Servisini Başlat
 
 **uv ile (önerilen):**
+
 ```bash
 # Proje kök dizininde
 uv run python -m uvicorn ai_service.main:app --reload --port 8000
 ```
 
 **pip ile (alternatif):**
+
 ```bash
 cd ai-service
 python -m venv .venv
@@ -166,14 +169,28 @@ uvicorn main:app --reload --port 8000
 ```
 
 ✅ Başarılı log çıktısı:
+
 ```
 INFO  [mediclear.graph] LangGraph StateGraph başarıyla derlendi (4 node)
 INFO:     Uvicorn running on http://0.0.0.0:8000
 ```
 
+### 6. Yakınımdaki Hastaneler (MCP) Özelliği
+
+MediClear artık konum tabanlı hastane önerme özelliğine sahiptir. `Yakınımdaki Hastaneler` sayfasında çalışır.
+Bu özellik arka planda Model Context Protocol (MCP) konseptini kullanarak Google Maps entegrasyonu sağlar. Yapay zeka, girdiğiniz serbest metindeki lokasyon bilgisini algılar ve haritada size özel sonuçları gösterir.
+
+**ÖNEMLİ:** Bu özelliğin çalışabilmesi için `.env` dosyanızda mutlaka geçerli bir Google Maps API anahtarı tanımlamış olmanız gerekmektedir:
+
+```env
+GOOGLE_MAPS_API_KEY=sizin_api_anahtariniz_buraya
+```
+
+Sistem kendi içinde Google Maps MCP sunucusunu çalıştırarak sizin için veriyi çekecektir. Özel bir sunucu başlatmanıza gerek yoktur, uygulamanın çalışmasıyla eşzamanlı olarak Python servisi tarafından otomatik yönetilir.
+
 ---
 
-### 6. Uygulamayı Aç
+### 7. Uygulamayı Aç
 
 Tarayıcıda [http://localhost:5000](http://localhost:5000) adresine gidin.
 
@@ -183,20 +200,20 @@ Tarayıcıda [http://localhost:5000](http://localhost:5000) adresine gidin.
 
 ### Node.js Backend (`:5000`)
 
-| Method | Endpoint | Açıklama | Auth |
-|--------|----------|----------|------|
-| `POST` | `/api/auth/register` | Yeni kullanıcı kaydı | Hayır |
-| `POST` | `/api/auth/login` | Giriş — JWT döner | Hayır |
-| `GET` | `/api/auth/profile` | Profil getir | JWT Bearer |
-| `PUT` | `/api/auth/profile` | Profil güncelle | JWT Bearer |
+| Method | Endpoint             | Açıklama             | Auth       |
+| ------ | -------------------- | -------------------- | ---------- |
+| `POST` | `/api/auth/register` | Yeni kullanıcı kaydı | Hayır      |
+| `POST` | `/api/auth/login`    | Giriş — JWT döner    | Hayır      |
+| `GET`  | `/api/auth/profile`  | Profil getir         | JWT Bearer |
+| `PUT`  | `/api/auth/profile`  | Profil güncelle      | JWT Bearer |
 
 ### Python AI Service (`:8000`)
 
-| Method | Endpoint | Açıklama |
-|--------|----------|----------|
-| `POST` | `/api/analyze` | Metin/görsel analiz — LangGraph pipeline |
-| `GET` | `/health` | Servis sağlık kontrolü |
-| `GET` | `/docs` | Swagger UI (interaktif API dökümantasyonu) |
+| Method | Endpoint       | Açıklama                                   |
+| ------ | -------------- | ------------------------------------------ |
+| `POST` | `/api/analyze` | Metin/görsel analiz — LangGraph pipeline   |
+| `GET`  | `/health`      | Servis sağlık kontrolü                     |
+| `GET`  | `/docs`        | Swagger UI (interaktif API dökümantasyonu) |
 
 ---
 

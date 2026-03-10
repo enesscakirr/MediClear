@@ -6,3 +6,4 @@ pillow>=12.1.1
 python-dotenv>=1.2.1
 python-multipart>=0.0.22
 uvicorn>=0.41.0
+mcp>=1.2.0

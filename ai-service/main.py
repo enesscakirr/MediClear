@@ -171,9 +171,34 @@ async def analyze(request: AnalyzeRequest):
         )
 
 
+class HospitalSearchRequest(BaseModel):
+    location: str
+
+# ---------------------------------------------------------------------------
+# ENDPOINT: POST /api/find_hospitals
+# ---------------------------------------------------------------------------
+@app.post("/api/find_hospitals")
+async def find_hospitals_endpoint(request: HospitalSearchRequest):
+    """
+    Kullanıcının metnindeki konumu algılayıp MCP üzerinden hastaneleri bulur.
+    """
+    logger.info(f"/api/find_hospitals isteği alındı, konum: {request.location}")
+    if not request.location.strip():
+        raise HTTPException(status_code=400, detail="Konum (location) boş olamaz.")
+        
+    try:
+        from hospital_agent import find_hospitals_for_location
+        # Bu fonksiyon zaten asenkron ve loglamasını içeride yapıyor
+        result = await find_hospitals_for_location(request.location)
+        return result
+    except Exception as e:
+        logger.error(f"❌ Hastane arama endpoint hatası: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Arama sırasında hata oluştu: {str(e)}")
+
 # ---------------------------------------------------------------------------
 # SAĞLIK KONTROLÜ: GET /health
 # ---------------------------------------------------------------------------
+
 @app.get("/health")
 async def health_check():
     """Servisin ayakta olduğunu doğrular."""
