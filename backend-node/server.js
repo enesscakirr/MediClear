@@ -12,7 +12,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/authRoutes');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
+// override: false → Docker Compose env vars take priority over .env file
+require('dotenv').config({ path: path.join(__dirname, '../.env'), override: false });
 
 // ---------------------------------------------------------------------------
 // BASIT LOGGER YARDIMCISI

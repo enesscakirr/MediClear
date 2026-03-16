@@ -1,0 +1,68 @@
+# ============================================================
+# .dockerignore — MediClear Projesi
+# Bu dosyalar Docker build context'ine dahil EDİLMEZ.
+# ============================================================
+
+# ─── Node.js ─────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+
+# ─── Python ──────────────────────────────────────────────────
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ─── Ortam Dosyaları (GİZLİ) ─────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── Git ─────────────────────────────────────────────────────
+.git/
+.gitignore
+.gitattributes
+
+# ─── IDE / Editor ────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─── Docker Dosyaları (tekrar kopyalanmasın) ─────────────────
+docker-compose.yml
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# ─── Python Araçları ─────────────────────────────────────────
+.python-version
+uv.lock
+pyproject.toml
+pyrightconfig.json
+
+# ─── Loglar ve Geçici Dosyalar ────────────────────────────────
+*.log
+logs/
+tmp/
+temp/
+
+# ─── Test ve CI ──────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+*.test.js
+tests/
+__tests__/
