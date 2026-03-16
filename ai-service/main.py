@@ -27,7 +27,8 @@ from dotenv import load_dotenv
 # ENV YÜKLEME — Proje kökündeki .env (ai-service/../.env)
 # ---------------------------------------------------------------------------
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
-load_dotenv(dotenv_path=_ENV_PATH)
+# override=False → Docker Compose env vars take priority over .env file
+load_dotenv(dotenv_path=_ENV_PATH, override=False)
 
 # ---------------------------------------------------------------------------
 # LOGLAMA YAPILANDIRMASI
@@ -40,7 +41,9 @@ logging.basicConfig(
 logger = logging.getLogger("mediclear.ai-service")
 
 logger.info("MediClear AI Service başlatılıyor...")
-logger.info(f"  .env dosyası: {_ENV_PATH} ({'bulundu ✅' if _ENV_PATH.exists() else "BULUNAMADI ❌"})")
+_env_status = "bulundu [OK]" if _ENV_PATH.exists() else "BULUNAMADI [HATA]"
+logger.info(f"  .env dosyasi: {_ENV_PATH} ({_env_status})")
+
 
 # Graph'ı import et (Ollama model bağlantıları burada kurulur)
 try:
@@ -192,7 +195,7 @@ async def find_hospitals_endpoint(request: HospitalSearchRequest):
         result = await find_hospitals_for_location(request.location)
         return result
     except Exception as e:
-        logger.error(f"❌ Hastane arama endpoint hatası: {e}", exc_info=True)
+        logger.error(f"Hastane arama endpoint hatası: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Arama sırasında hata oluştu: {str(e)}")
 
 # ---------------------------------------------------------------------------

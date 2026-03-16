@@ -52,14 +52,23 @@
 
 ```
 MediClear/
-├── frontend/           → HTML, CSS, Vanilla JS (kullanıcı arayüzü)
-├── backend-node/       → Express.js API, MongoDB, JWT Auth
+├── frontend/              → HTML, CSS, Vanilla JS (kullanıcı arayüzü)
+├── backend-node/          → Express.js API, MongoDB, JWT Auth
 │   ├── routes/
 │   ├── middleware/
 │   └── models/
-├── ai-service/         → FastAPI + LangGraph + Ollama entegrasyonu
-├── .env                → Gerçek ortam değerleri (Git'e ekleme!)
-├── .env.example        → Değişken şablonu (herkese açık)
+├── ai-service/            → FastAPI + LangGraph + Ollama entegrasyonu
+│   ├── main.py
+│   ├── graph.py
+│   ├── hospital_agent.py
+│   └── requirements.txt
+├── deploy/                ← Docker Orkestrasyonu (Tüm Docker Dosyaları)
+│   ├── docker-compose.yml
+│   ├── Dockerfile.backend
+│   └── Dockerfile.ai
+├── .dockerignore          ← İmajlara girmeyen dosyalar
+├── .env                   → Gerçek ortam değerleri (Git'e ekleme!)
+├── .env.example           → Değişken şablonu (herkese açık)
 └── README.md
 ```
 
@@ -193,6 +202,147 @@ Sistem kendi içinde Google Maps MCP sunucusunu çalıştırarak sizin için ver
 ### 7. Uygulamayı Aç
 
 Tarayıcıda [http://localhost:5000](http://localhost:5000) adresine gidin.
+
+---
+
+## 🐳 Docker ile Çalıştırma
+
+MediClear'ı Docker ve Docker Compose kullanarak **tek komutla** ayağa kaldırabilirsiniz. Bu yöntem, MongoDB ve Python AI servisini otomatik olarak yönetir; yalnızca Ollama'yı ayrıca çalıştırmanız gerekir.
+
+### Ön Gereksinimler (Docker)
+
+| Araç            | Sürüm     | Kaynak                                                |
+| --------------- | --------- | ----------------------------------------------------- |
+| Docker Engine   | ≥ 24      | [docker.com](https://www.docker.com/get-started)      |
+| Docker Compose  | ≥ 2.20    | Docker Desktop ile birlikte gelir                     |
+| Ollama          | En güncel | [ollama.com](https://ollama.com) — host'ta çalışır    |
+
+---
+
+### Adım 1: Ollama'yı Host Makinede Başlat
+
+> **Önemli:** Ollama, Docker konteynerinin **dışında**, doğrudan host işletim sisteminde çalışır. Konteynerler ona `host.docker.internal:11434` adresi üzerinden ulaşır.
+
+```bash
+# Ollama servisini başlat
+ollama serve
+
+# Ayrı bir terminalde modelleri indir
+ollama pull llava:7b
+ollama pull translategemma:latest
+ollama pull Goosedev/medbot:latest
+```
+
+---
+
+### Adım 2: Ortam Değişkenlerini Ayarla
+
+```bash
+cp .env.example .env
+```
+
+`.env` dosyasında Docker için kritik değerleri kontrol edin:
+
+```env
+# Docker Compose ortamında MongoDB servis adıyla ulaşılır
+MONGODB_URI=mongodb://db:27017/MediClear
+
+# Ollama, host makinede çalışır — konteynerden bu adresiyle ulaşılır
+OLLAMA_BASE_URL=http://host.docker.internal:11434
+
+# Güvenlik için mutlaka değiştirin!
+JWT_SECRET=guclu_ve_uzun_bir_gizli_anahtar_girin
+```
+
+---
+
+### Adım 3: Sistemi Başlat
+
+```bash
+# Deploy dizinine geçin ve çalıştırın
+cd deploy
+docker-compose up --build -d
+```
+
+İlk çalıştırmada Docker imajları inşa edilir (~2-5 dk.). Sonraki başlatmalarda:
+
+```bash
+docker-compose up -d       # Önceki imajları kullan (hızlı)
+docker-compose up --build -d # İmajları yeniden derle (kod değişikliği sonrası)
+docker-compose up -d       # Arka planda (detach) çalıştır
+```
+
+---
+
+### Adım 4: Uygulamayı Aç
+
+Tarayıcıda [http://localhost:5000](http://localhost:5000) adresine gidin.
+
+Servisler başarıyla başladığında:
+
+| Servis          | Adres                                          |
+| --------------- | ---------------------------------------------- |
+| Frontend + API  | [http://localhost:5000](http://localhost:5000)  |
+| AI Service Docs | [http://localhost:8000/docs](http://localhost:8000/docs) |
+| MongoDB         | `mongodb://localhost:27017`                    |
+
+---
+
+### Servislerin Birbiriyle İletişimi
+
+```
+Tarayıcı
+  │
+  │ HTTP :5000
+  ▼
+backend-node (container: mediclear-backend)
+  ├── mongodb://db:27017       →  db (container: mediclear-db)
+  └── http://ai-service:8000   →  ai-service (container: mediclear-ai)
+                                        │
+                                        │ http://host.docker.internal:11434
+                                        ▼
+                                   Ollama (host makinede)
+```
+
+> Docker'ın iç ağı (`mediclear-network`) sayesinde servisler birbirine **container adıyla** (`db`, `ai-service`) ulaşır. Ollama ise konteynerin dışında çalıştığı için `host.docker.internal` özel DNS adresi kullanılır (Windows/Mac otomatik tanımlar; Linux'ta `extra_hosts: host-gateway` ayarı geçerlidir).
+
+---
+
+### Veri Kalıcılığı
+
+MongoDB verileri `mediclear_mongo_data` adlı Docker volume'unda saklanır. Konteynerler durdurulsa veya silinse bile veriler korunur:
+
+```bash
+# Volume listesi
+docker volume ls
+
+# Sistemi tamamen sıfırla (verileri de sil)
+docker-compose down -v
+```
+
+---
+
+### Faydalı Komutlar
+
+```bash
+# Tüm servislerin loglarını izle
+docker-compose logs -f
+
+# Sadece bir servisin logları
+docker-compose logs -f backend-node
+
+# Çalışan konteynerlerin durumu
+docker-compose ps
+
+# Bir konteynere bağlan (shell)
+docker exec -it mediclear-ai bash
+
+# Sistemi durdur (verileri koru)
+docker-compose down
+
+# Sistemi durdur ve volume'ları sil
+docker-compose down -v
+```
 
 ---
 

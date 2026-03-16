@@ -1,0 +1,44 @@
+# ============================================================
+# backend-node/Dockerfile
+# MediClear — Node.js Backend (Express.js + Frontend Statik Servis)
+# ============================================================
+
+# ─── Stage 1: Install Dependencies ─────────────────────────────
+FROM node:20-alpine AS deps
+
+WORKDIR /app
+
+# Copy package files first (layer cache optimization)
+COPY package.json package-lock.json ./
+
+# Install only production dependencies
+RUN npm ci --omit=dev
+
+# ─── Stage 2: Runner Image ──────────────────────────────────
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# Security: create non-root user
+RUN addgroup -S mediclear && adduser -S mediclear -G mediclear
+
+# Copy dependencies from previous stage
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy application files
+COPY . .
+
+# User ownership
+RUN chown -R mediclear:mediclear /app
+USER mediclear
+
+# Expose port
+EXPOSE 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:5000/ || exit 1
+
+# Start — frontend/ volume is mounted in docker-compose:
+# volumes: - ./frontend:/app/frontend:ro
+CMD ["node", "server.js"]
