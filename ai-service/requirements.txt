@@ -7,3 +7,9 @@ python-dotenv>=1.2.1
 python-multipart>=0.0.22
 uvicorn>=0.41.0
 mcp>=1.2.0
+
+# --- RAG (Retrieval-Augmented Generation) ---
+chromadb>=0.4.24
+langchain-chroma>=0.1.0
+sentence-transformers>=2.6.1
+pypdf>=4.1.0
