@@ -192,11 +192,11 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Üzerine gelince */
+/* Üzerine gelince - Rengi daha açık/parlak yaptık */
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(0, 102, 255, 0.35);
-  background: linear-gradient(135deg, #1a75ff, #7e63ff);
+  box-shadow: 0 12px 25px rgba(0, 102, 255, 0.4);
+  background: linear-gradient(135deg, #338dff, #8ba8ff); /* Eski koyu mavi yerine çok daha açık ve canlı bir mavi-mor geçişi */
 }
 
 /* Çerçeveli Buton */
@@ -602,10 +602,10 @@ section:nth-child(odd) {
 }
 
 .why-card:hover .why-icon {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: var(--white);
+  background: linear-gradient(135deg, var(--primary-light), var(--accent)); /* Eskiden çok koyu olan bu kısmı daha açık/dijital bir mavi yaptık */
+  color: var(--dark); /* İkon rengini okunması için koyu yaptık */
   transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 10px 20px rgba(0, 102, 255, 0.2);
+  box-shadow: 0 10px 20px rgba(72, 202, 228, 0.35); /* Gölgeyi de açık rengin tonuna ayarladık */
 }
 
 /* --- FOOTER (Alt Bilgi) --- */

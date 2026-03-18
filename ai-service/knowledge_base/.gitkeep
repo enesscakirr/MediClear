@@ -1,0 +1,2 @@
+# Bu klasör RAG (Retrieval-Augmented Generation) sistemi için referans belgelerini içerir.
+# Buraya attığınız .pdf ve .txt uzantılı tıbbi kaynaklar ingest_data.py ile ChromaDB'ye yüklenecektir.

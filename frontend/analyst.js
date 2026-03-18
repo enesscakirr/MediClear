@@ -115,7 +115,9 @@
         const requestBody = {
             text: input,
             image_base64: selectedImageBase64,
+            use_rag: true
         };
+
 
         log.info(`POST ${PYTHON_API_URL} — istek gönderiliyor...`);
         const fetchStart = performance.now();
@@ -148,10 +150,52 @@
             }
 
             // Sonucu Markdown olarak render et
-            aiOutput.innerHTML = marked.parse(data.result);
+            aiOutput.innerHTML = marked.parse(data.result || "");
+
+            // ── RAG: Ek Bilgi ve Kaynak Gösterimi ──
+            if (data.result_with_rag && data.result_with_rag.trim().length > 0) {
+                const ragResultHTML = marked.parse(data.result_with_rag);
+                let refList = "";
+                if (data.references && data.references.length > 0) {
+                    refList = data.references.map(ref => `<li style="margin-bottom:0.25rem;"><i class="fa-solid fa-file-medical" style="color:#28a745; margin-right:0.4rem;"></i> ${ref}</li>`).join('');
+                }
+
+                const docsHTML = refList ? `
+                    <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px dashed #c3e6cb;">
+                        <p style="font-size:0.9rem; color:#555; margin-bottom:0.75rem;"><strong>Faydalanılan Kaynaklar:</strong></p>
+                        <ul style="list-style:none; padding-left:0; margin:0; font-size:0.9rem; color:#222; font-weight:500;">
+                            ${refList}
+                        </ul>
+                    </div>` : '';
+
+                const refsHTML = `
+                <div style="margin-top:2rem; background:linear-gradient(to right, #f4f9f4, #ffffff); border-left:4px solid #28a745; padding:1.25rem; border-radius:0 8px 8px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                    <h4 style="margin-top:0; color:#1e7e34; font-size:1.05rem; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
+                        <i class="fa-solid fa-book-medical"></i> Tıbbi Bilgi Bankası Destekli Ek Analiz
+                    </h4>
+                    <div style="font-size:0.95rem; line-height:1.6; color:#333;">
+                        ${ragResultHTML}
+                    </div>
+                    ${docsHTML}
+                </div>`;
+                aiOutput.insertAdjacentHTML('beforeend', refsHTML);
+            } else if (data.references && data.references.length > 0) {
+                // RAG sonucu yok ama referans çekilmişse sadece referansı göster
+                const refList = data.references.map(ref => `<li style="margin-bottom:0.25rem;"><i class="fa-solid fa-file-medical" style="color:#28a745; margin-right:0.4rem;"></i> ${ref}</li>`).join('');
+                const refsHTML = `
+                <div style="margin-top:2rem; background:linear-gradient(to right, #f4f9f4, #ffffff); border-left:4px solid #28a745; padding:1.25rem; border-radius:0 8px 8px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                    <h4 style="margin-top:0; color:#1e7e34; font-size:1.05rem; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
+                        <i class="fa-solid fa-book-medical"></i> Bilgi Kaynağı
+                    </h4>
+                    <ul style="list-style:none; padding-left:0; margin:0; font-size:0.9rem; color:#222; font-weight:500;">
+                        ${refList}
+                    </ul>
+                </div>`;
+                aiOutput.insertAdjacentHTML('beforeend', refsHTML);
+            }
 
             // ── Teknik Detaylar (isteğe bağlı, collapsible) ──
-            const hasDetails = data.english_text || data.english_analysis;
+            const hasDetails = data.english_text || data.english_analysis_no_rag || data.english_analysis_with_rag;
             if (hasDetails) {
                 const tableSection = data.extracted_table
                     ? `<p><strong>0. Görselden Çıkarılan Tablo:</strong><br><pre style="white-space:pre-wrap;font-size:0.8rem;">${data.extracted_table}</pre></p><hr>`
@@ -168,9 +212,11 @@
                         ${tableSection}
                         <p><strong>1. Girdi (Ham Veri):</strong><br>${data.raw_input || '-'}</p>
                         <hr>
-                        <p><strong>2. Ingilizce Ceviri:</strong><br>${data.english_text || '-'}</p>
+                        <p><strong>2. İngilizce Çeviri:</strong><br>${data.english_text || '-'}</p>
                         <hr>
-                        <p><strong>3. Doktor Analizi (Ingilizce):</strong><br>${data.english_analysis || '-'}</p>
+                        <p><strong>3. Ön Analiz (İngilizce - RAG'siz):</strong><br>${data.english_analysis_no_rag || '-'}</p>
+                        <hr>
+                        <p><strong>4. Ek Analiz (İngilizce - RAG'li):</strong><br>${data.english_analysis_with_rag || '-'}</p>
                     </div>
                 </div>`;
                 aiOutput.insertAdjacentHTML('beforeend', detailsHTML);

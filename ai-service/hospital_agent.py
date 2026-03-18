@@ -146,7 +146,7 @@ async def find_hospitals_for_location(user_query: str) -> HospitalResult:
     
     try:
         logger.info(" AI ile konum çıkarımı başlatılıyor...")
-        llm = OllamaLLM(model=HOSPITAL_MODEL, base_url=OLLAMA_BASE_URL)
+        llm = OllamaLLM(model=HOSPITAL_MODEL, base_url=OLLAMA_BASE_URL, keep_alive=0)
         chain = prompt | llm
         
         extracted_loc = chain.invoke({"query": user_query})

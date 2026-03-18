@@ -93,16 +93,20 @@ async def log_requests(request: Request, call_next):
 class AnalyzeRequest(BaseModel):
     text: str = ""
     image_base64: Optional[str] = None
+    use_rag: bool = False
 
 
 class AnalyzeResponse(BaseModel):
     result: str
+    result_with_rag: Optional[str] = None
     steps: list[str]
+    references: list[str] = [] # Vektör DB'den çekilen kaynaklar
     # Teknik Detaylar — pipeline ara çıktıları (isteğe bağlı gösterim)
     raw_input: str = ""
     extracted_table: str = ""
     english_text: str = ""
-    english_analysis: str = ""
+    english_analysis_no_rag: str = ""
+    english_analysis_with_rag: str = ""
 
 
 # ---------------------------------------------------------------------------
@@ -117,7 +121,7 @@ async def analyze(request: AnalyzeRequest):
     has_text = bool(request.text.strip())
     has_image = bool(request.image_base64)
 
-    logger.info(f"/api/analyze isteği → metin: {has_text}, görsel: {has_image}")
+    logger.info(f"/api/analyze isteği → metin: {has_text}, görsel: {has_image}, use_rag: {request.use_rag}")
 
     if not has_text and not has_image:
         logger.warning("Boş istek reddedildi: metin ve görsel ikisi de boş.")
@@ -129,10 +133,15 @@ async def analyze(request: AnalyzeRequest):
     initial_state = {
         "raw_input": request.text.strip(),
         "image_base64": request.image_base64,
+        "use_rag": request.use_rag,
         "extracted_table": "",
         "english_text": "",
-        "english_analysis": "",
-        "final_result": "",
+        "english_analysis_no_rag": "",
+        "final_result_no_rag": "",
+        "retrieved_context": "",
+        "references": [],
+        "english_analysis_with_rag": "",
+        "final_result_with_rag": "",
         "steps": [],
     }
 
@@ -146,12 +155,15 @@ async def analyze(request: AnalyzeRequest):
         logger.info(f"✅ LangGraph pipeline tamamlandı ({elapsed:.0f}ms) — {len(final_state.get('steps', []))} adım")
 
         return AnalyzeResponse(
-            result=final_state.get("final_result", ""),
+            result=final_state.get("final_result_no_rag", ""),
+            result_with_rag=final_state.get("final_result_with_rag", ""),
             steps=final_state.get("steps", []),
+            references=final_state.get("references", []),
             raw_input=final_state.get("raw_input", ""),
             extracted_table=final_state.get("extracted_table", ""),
             english_text=final_state.get("english_text", ""),
-            english_analysis=final_state.get("english_analysis", ""),
+            english_analysis_no_rag=final_state.get("english_analysis_no_rag", ""),
+            english_analysis_with_rag=final_state.get("english_analysis_with_rag", ""),
         )
 
 

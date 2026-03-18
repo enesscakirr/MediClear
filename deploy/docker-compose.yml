@@ -87,6 +87,8 @@ services:
       VISION_MODEL: ${VISION_MODEL:-llava:7b}
       TRANSLATOR_MODEL: ${TRANSLATOR_MODEL:-translategemma:latest}
       MEDICAL_MODEL: ${MEDICAL_MODEL:-Goosedev/medbot:latest}
+      CHROMADB_HOST: chromadb
+      CHROMADB_PORT: 8000
     # To reach host network on Linux (optional):
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -99,12 +101,28 @@ services:
       retries: 3
       start_period: 20s
 
+  # ─────────────────────────────────────────────────────────────
+  # 4. CHROMA DB: Vector Database (RAG İçin)
+  # ─────────────────────────────────────────────────────────────
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: mediclear-chromadb
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    networks:
+      - mediclear-net
+
 # ─────────────────────────────────────────────────────────────
 # VOLUMES
 # ─────────────────────────────────────────────────────────────
 volumes:
   mongo_data:
     name: mediclear_mongo_data
+  chroma_data:
+    name: mediclear_chroma_data
 
 # ─────────────────────────────────────────────────────────────
 # NETWORKS
